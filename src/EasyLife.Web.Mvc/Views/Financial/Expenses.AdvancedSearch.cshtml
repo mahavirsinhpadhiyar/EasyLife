@@ -1,0 +1,17 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Expenses.ExpensesListViewModel
+<div class="abp-advanced-search">
+    <form id="ExpensesSearchForm" class="form-horizontal">
+        <div class="input-group">
+            <input type="text" name="Keyword" class="form-control txt-search" placeholder="Search" />
+            <div class="input-group-prepend">
+                <button type="button" class="btn bg-white btn-search border-1" id="searchbutton">
+                    <span class="fas fa-search" aria-hidden="true"></span>
+                </button>
+            </div>
+            &nbsp;
+            @{ Model.ExpenseCategoryList.Insert(0, new SelectListItem() { Text = "-- All Category --", Value = "" }); }
+            @Html.DropDownList("ExpenseCategoryFilterId", Model.ExpenseCategoryList, new { @class = "form-control", @required = "required", @name = "ExpenseCategoryFilterId" })
+        </div>
+    </form>
+</div>

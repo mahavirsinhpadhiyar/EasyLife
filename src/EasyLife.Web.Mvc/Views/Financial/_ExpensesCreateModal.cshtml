@@ -1,0 +1,53 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Expenses.ExpensesListViewModel
+@{ Layout = null; }
+
+<style>
+    .section-title {
+        display: block;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        color: #003e80
+    }
+</style>
+
+<div class="modal fade" id="ExpensesCreateModal" tabindex="-1" role="dialog" aria-labelledby="ExpensesCreateModalLabel" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Create Student"))
+            <form name="expensesForm" role="form" class="form-horizontal">
+                <div class="modal-body" style="height:500px; overflow:auto;">
+                    <div class="row col-md-12">
+                        <div class="col-md-4 form-group required">
+                            <label for="Payee">Payee</label>
+                            <input id="Payee" type="text" name="Payee" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="Money">Money</label>
+                            <input id="Money" type="text" name="Money" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="ExpenseDate">Date</label>
+                            <input id="ExpenseDate" type="text" name="ExpenseDate" class="form-control datetimepicker-input" required>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12">
+                        <div class="col-md-4 form-group required">
+                            <label for="ExpenseCategoryId">Category</label>
+                            @Html.DropDownList("ExpenseCategoryId", Model.ExpenseCategoryList, new { @class = "form-control", @required = "required", @name = "ExpenseCategoryId" })
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12">
+                        <div class="col-md-12 form-group">
+                            <label for="Note">Note</label>
+                            <textarea id="Note" type="text" name="Note" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+            </form>
+        </div>
+    </div>
+</div>
