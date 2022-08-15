@@ -22,7 +22,7 @@
         abp.ui.setBusy(_$form);
         _userService.update(user).done(function () {
             _$modal.modal('hide');
-            abp.notify.info(l('SavedSuccessfully'));
+            abp.notify.success(l('SavedSuccessfully'));
             abp.event.trigger('user.edited', user);
         }).always(function () {
             abp.ui.clearBusy(_$form);

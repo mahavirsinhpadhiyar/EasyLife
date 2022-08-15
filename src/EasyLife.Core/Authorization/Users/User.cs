@@ -30,5 +30,7 @@ namespace EasyLife.Authorization.Users
 
             return user;
         }
+        public bool ShouldChangePasswordOnNextLogin { get; set; }
+        public DateTime? LastLoginTime { get; set; }
     }
 }

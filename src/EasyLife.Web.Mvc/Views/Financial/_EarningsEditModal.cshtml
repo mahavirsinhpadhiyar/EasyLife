@@ -1,0 +1,64 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Earnings.EditEarningsViewModel
+@{ Layout = null; }
+
+<style>
+    .section-title {
+        display: block;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        color: #003e80
+    }
+</style>
+
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Earnings"))
+<form name="earningsForm" role="form" class="form-horizontal">
+    <div class="modal-body" style="height:500px; overflow:auto;">
+        <input type="hidden" id="EarningsId" name="Id" value="@Model.Earnings.Id" />
+        <div class="row col-md-12">
+            <div class="col-md-4 form-group required">
+                <label for="Payee">Payee</label>
+                <input id="EditPayee" type="text" name="Payee" class="form-control" value="@Model.Earnings.Payee" required>
+            </div>
+            <div class="col-md-4 form-group required">
+                <label for="Money">Money</label>
+                <input id="EditMoney" type="text" name="Money" class="form-control" value="@Model.Earnings.Money" required>
+            </div>
+            <div class="col-md-4 form-group required">
+                <label for="EarningDate">Date</label>
+                <input id="EditEarningDate" type="text" name="EarningDate" class="form-control datetimepicker-input-edit" value="@Model.Earnings.EarningDate.ToString("yyyy/MM/dd HH:mm")" required>
+            </div>
+        </div>
+
+        <div class="row col-md-12">
+            <div class="col-md-4 form-group required">
+                <label for="ExpenseCategoryId">Category</label>
+                @*@Html.DropDownList("ExpenseCategoryId", Model.ExpenseCategoryList, new { @class = "form-control", @required = "required", @name = "ExpenseCategoryId" })*@
+                @*@Html.DropDownList("ExpenseCategoryId", new SelectList(Model.ExpenseCategoryList, "value", "text", Model.Earnings.ExpenseCategoryId), new { @class = "form -control", @required = "required", @name = "ExpenseCategoryId" })*@
+                <select id="EditEarningCategoryId" name="EarningCategoryId" class="form-control">
+                    @foreach (var item in Model.EarningCategoryList)
+                    {
+                        if (Model.Earnings.EarningCategoryId.ToString().ToLower() == item.Value.ToLower())
+                        {
+        <option value="@item.Value" selected="selected">@item.Text</option>
+ }
+    else
+    {
+<option value="@item.Value">@item.Text</option>
+}
+}
+                </select>
+            </div>
+        </div>
+
+        <div class="row col-md-12">
+            <div class="col-md-12 form-group">
+                <label for="Note">Note</label>
+                <textarea id="EditNote" type="text" name="Note" class="form-control" style="height: 200px">@Model.Earnings.Note</textarea>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Financial/Earnings/_EarningsEditModel.js" asp-append-version="true"></script>

@@ -144,7 +144,8 @@ namespace EasyLife.Controllers
                 externalUser.EmailAddress,
                 externalUser.EmailAddress,
                 Authorization.Users.User.CreateRandomPassword(),
-                true
+                true,
+                false
             );
 
             user.Logins = new List<UserLogin>

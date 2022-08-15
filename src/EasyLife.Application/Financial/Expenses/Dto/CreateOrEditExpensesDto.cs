@@ -10,7 +10,7 @@ namespace EasyLife.Financial.Expenses.Dto
         public string Payee { get; set; }
         public string Note { get; set; }
         public DateTime ExpenseDate { get; set; }
-        public bool ConsiderInTotal { get; set; }
+        public bool DoNotConsiderInTotal { get; set; }
         public double Money { get; set; }
         public Guid? ExpenseCategoryId { get; set; }
         public long UserId { get; set; }
@@ -19,7 +19,7 @@ namespace EasyLife.Financial.Expenses.Dto
         {
             get
             {
-                return ExpenseDate.ToString("dd/MM/yyyy");
+                return ExpenseDate.ToString("dd/MM/yyyy HH:mm");
             }
         }
     }

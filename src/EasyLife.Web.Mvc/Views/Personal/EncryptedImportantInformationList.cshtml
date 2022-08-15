@@ -1,0 +1,86 @@
+﻿@using EasyLife.Web.Startup
+@using EasyLife.Web.Models.Personal.EncryptedImportantThings
+@model ImportantInformationListViewModel
+@{ ViewBag.Title = L("EasyLife");
+    ViewBag.CurrentPageName = PageNames.EncryptedImportantInformation; }
+
+<style>
+    .pac-container {
+        z-index: 10000 !important;
+    }
+
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
+</style>
+
+@section scripts
+{
+<environment names="Development">
+    <script src="~/view-resources/Views/Personal/EncryptedImportantInformation.js" asp-append-version="true"></script>
+</environment>
+
+<environment names="Staging,Production">
+    @*Comment as of now because deployment not finding minified files.*@
+    @*
+    <script src="~/view-resources/Views/Financial/Expenses/Expenses.min.js" asp-append-version="true"></script>*@
+    <script src="~/view-resources/Views/Personal/EncryptedImportantInformation.js" asp-append-version="true"></script>
+</environment>
+}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <h1>Encrypted Important Information</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @await Html.PartialAsync("~/Views/Personal/EncryptedImportantInformation.AdvancedSearch.cshtml")
+                            </div>
+                            <div class="col-md-6">
+                                <a href="javascript:;" data-toggle="modal" data-target="#EncryptedImportantInformationCreateModal" class="btn bg-blue float-sm-right">
+                                    <i class="fa fa-plus-square"></i>
+                                    @L("Create")
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="EncryptedImportantInformationTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Title</th>
+                                        <th style="width: 150px">@L("Actions")</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@await Html.PartialAsync("~/Views/Personal/_EncryptedImportantInformationCreateModal.cshtml", Model)
+
+<div class="modal fade" id="EncryptedImportantInformationEditModal" tabindex="-1" role="dialog" aria-labelledby="EncryptedImportantInformationEditModalLabel" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>

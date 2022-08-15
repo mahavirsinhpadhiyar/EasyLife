@@ -1,0 +1,28 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Investment.EditShareMasterViewModel
+@{ Layout = null; }
+
+<style>
+    .section-title {
+        display: block;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        color: #003e80
+    }
+</style>
+
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Share Master"));
+<form name="shareMasterForm" role="form" class="form-horizontal">
+    <div class="modal-body" style="height:500px; overflow:auto;">
+        <input type="hidden" id="ShareMasterId" name="Id" value="@Model.ShareMasterDto.Id" />
+        <div class="row col-md-12">
+            <div class="col-md-4 form-group required">
+                <label for="Share_Name">Share Name</label>
+                <input id="Edit_Share_Name" type="text" name="Share_Name" class="form-control" value="@Model.ShareMasterDto.Share_Name" required>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Financial/Investment/_ShareMasterEditModel.js" asp-append-version="true"></script>

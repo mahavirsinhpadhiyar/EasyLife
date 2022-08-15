@@ -1,0 +1,34 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Personal.EncryptedImportantThings.EditImportantInformationListViewModel
+@{ Layout = null; }
+
+<style>
+    .section-title {
+        display: block;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        color: #003e80
+    }
+</style>
+
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Important Information"))
+<form name="EditEncryptedImportantInformationForm" role="form" class="form-horizontal">
+    <div class="modal-body" style="height:500px; overflow:auto;">
+        <input type="hidden" id="EditEncryptedImportantInformationId" name="Id" value="@Model.ImportantInformationViewModel.Id" />
+        <div class="row col-md-12">
+            <div class="col-md-6 form-group required">
+                <label for="Title">Title</label>
+                <input id="EditTitle" type="text" name="Title" class="form-control" value="@Model.ImportantInformationViewModel.Title" required>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="col-md-12 form-group required">
+                <label for="EncryptedText">Information (This information will be saved as encrypted form)</label>
+                <textarea id="EditEncryptedText" name="EncryptedText" class="form-control" style="height:500px">@Model.ImportantInformationViewModel.EncryptedText</textarea>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Personal/_EncryptedImportantInformationEditModel.js" asp-append-version="true"></script>

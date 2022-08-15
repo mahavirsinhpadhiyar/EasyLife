@@ -85,7 +85,7 @@
             .done(function () {
                 _$modal.modal('hide');
                 _$form[0].reset();
-                abp.notify.info(l('SavedSuccessfully'));
+                abp.notify.success(l('SavedSuccessfully'));
                 _$rolesTable.ajax.reload();
             })
             .always(function () {
@@ -131,7 +131,7 @@
                     _roleService.delete({
                         id: roleId
                     }).done(() => {
-                        abp.notify.info(l('SuccessfullyDeleted'));
+                        abp.notify.success(l('SuccessfullyDeleted'));
                         _$rolesTable.ajax.reload();
                     });
                 }

@@ -11,5 +11,7 @@ namespace EasyLife.Financial.Expenses
         [ForeignKey("FKExpenseCategory")]
         public Guid? ParentId { get; set; }
         public ExpenseCategory FKExpenseCategory { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsForMeActive { get; set; }
     }
 }

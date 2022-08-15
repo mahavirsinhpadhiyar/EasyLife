@@ -6,12 +6,14 @@ namespace EasyLife.Authorization.Roles
         {
             public const string Admin = "Admin";
             public const string User = "User";
+            public const string SuperAdmin = "SuperAdmin";
         }
 
         public static class Tenants
         {
             public const string Admin = "Admin";
             public const string User = "User";
+            public const string SuperAdmin = "SuperAdmin";
         }
     }
 }

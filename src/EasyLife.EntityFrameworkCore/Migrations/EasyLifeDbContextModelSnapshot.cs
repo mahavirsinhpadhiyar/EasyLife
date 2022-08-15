@@ -1462,6 +1462,9 @@ namespace EasyLife.Migrations
                     b.Property<bool>("IsTwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("LastLoginTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
 
@@ -1503,6 +1506,9 @@ namespace EasyLife.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<bool>("ShouldChangePasswordOnNextLogin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -1531,6 +1537,112 @@ namespace EasyLife.Migrations
                     b.ToTable("AbpUsers");
                 });
 
+            modelBuilder.Entity("EasyLife.Financial.Earning.EarningCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsForMeActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("EarningCategory");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Earning.Earnings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("ConsiderInTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DoNotConsiderInTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("EarningCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("EarningDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Money")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Payee")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EarningCategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Earnings");
+                });
+
             modelBuilder.Entity("EasyLife.Financial.Expenses.ExpenseCategory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1552,7 +1664,13 @@ namespace EasyLife.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsForMeActive")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
@@ -1577,9 +1695,6 @@ namespace EasyLife.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("ConsiderInTotal")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -1591,6 +1706,9 @@ namespace EasyLife.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("DoNotConsiderInTotal")
+                        .HasColumnType("bit");
 
                     b.Property<Guid?>("ExpenseCategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -1626,6 +1744,113 @@ namespace EasyLife.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Expenses");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_Share_Master", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Share_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EL_Financial_Investment_Share_Master");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_Share_Orders", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EL_Financial_Investment_Share_Master_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Share_Amount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Share_App_Order_Id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Share_Average_Price")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("Share_Order_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Share_Order_Id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Share_Order_Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Share_Price_Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Share_Qty_Exchange_Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Share_Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Share_Transaction_Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EL_Financial_Investment_Share_Master_Id");
+
+                    b.ToTable("EL_Financial_Investment_Share_Orders");
                 });
 
             modelBuilder.Entity("EasyLife.MultiTenancy.Tenant", b =>
@@ -1689,6 +1914,49 @@ namespace EasyLife.Migrations
                     b.HasIndex("TenancyName");
 
                     b.ToTable("AbpTenants");
+                });
+
+            modelBuilder.Entity("EasyLife.Personal.EncryptedImportantThings.EncryptedImportantInformation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EncryptedText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EncryptedImportantInformation");
                 });
 
             modelBuilder.Entity("Abp.Application.Features.EditionFeatureSetting", b =>
@@ -1909,6 +2177,32 @@ namespace EasyLife.Migrations
                     b.Navigation("LastModifierUser");
                 });
 
+            modelBuilder.Entity("EasyLife.Financial.Earning.EarningCategory", b =>
+                {
+                    b.HasOne("EasyLife.Financial.Earning.EarningCategory", "FKEarningCategory")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("FKEarningCategory");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Earning.Earnings", b =>
+                {
+                    b.HasOne("EasyLife.Financial.Earning.EarningCategory", "EarningCategory")
+                        .WithMany()
+                        .HasForeignKey("EarningCategoryId");
+
+                    b.HasOne("EasyLife.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EarningCategory");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EasyLife.Financial.Expenses.ExpenseCategory", b =>
                 {
                     b.HasOne("EasyLife.Financial.Expenses.ExpenseCategory", "FKExpenseCategory")
@@ -1933,6 +2227,28 @@ namespace EasyLife.Migrations
                     b.Navigation("ExpenseCategory");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_Share_Master", b =>
+                {
+                    b.HasOne("EasyLife.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_Share_Orders", b =>
+                {
+                    b.HasOne("EasyLife.Financial.Investment.EL_Financial_Investment_Share_Master", "EL_Financial_Investment_Share_Master")
+                        .WithMany("EL_Financial_Investment_Share_Orders")
+                        .HasForeignKey("EL_Financial_Investment_Share_Master_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EL_Financial_Investment_Share_Master");
                 });
 
             modelBuilder.Entity("EasyLife.MultiTenancy.Tenant", b =>
@@ -1960,6 +2276,17 @@ namespace EasyLife.Migrations
                     b.Navigation("Edition");
 
                     b.Navigation("LastModifierUser");
+                });
+
+            modelBuilder.Entity("EasyLife.Personal.EncryptedImportantThings.EncryptedImportantInformation", b =>
+                {
+                    b.HasOne("EasyLife.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Abp.Application.Features.EditionFeatureSetting", b =>
@@ -2031,6 +2358,11 @@ namespace EasyLife.Migrations
                     b.Navigation("Settings");
 
                     b.Navigation("Tokens");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_Share_Master", b =>
+                {
+                    b.Navigation("EL_Financial_Investment_Share_Orders");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,15 +3,30 @@
 <div class="abp-advanced-search">
     <form id="ExpensesSearchForm" class="form-horizontal">
         <div class="input-group">
-            <input type="text" name="Keyword" class="form-control txt-search" placeholder="Search" />
-            <div class="input-group-prepend">
-                <button type="button" class="btn bg-white btn-search border-1" id="searchbutton">
-                    <span class="fas fa-search" aria-hidden="true"></span>
-                </button>
-            </div>
-            &nbsp;
+            <input type="text" name="Keyword" class="form-control txt-search" placeholder="Search Payee" />
+            @*<div class="input-group-prepend">
+            <button type="button" class="btn bg-white btn-search border-1" id="searchbutton">
+                <span class="fas fa-search" aria-hidden="true"></span>
+            </button>
+        </div>*@
+            &nbsp;&nbsp;
             @{ Model.ExpenseCategoryList.Insert(0, new SelectListItem() { Text = "-- All Category --", Value = "" }); }
             @Html.DropDownList("ExpenseCategoryFilterId", Model.ExpenseCategoryList, new { @class = "form-control", @required = "required", @name = "ExpenseCategoryFilterId" })
+            @if (User.IsInRole(EasyLife.Authorization.Roles.StaticRoleNames.Host.Admin))
+            {
+                Model.UsersList.Insert(0, new SelectListItem() { Text = "-- All Users --", Value = "" });
+        @Html.DropDownList("FilterUserId", Model.UsersList, new { @class = "form-control", @required = "required", @name = "FilterUserId" })}
+            &nbsp;&nbsp;
+            <input type="text" id="dateTimePicker-expense-filter-startDate" name="dateTimePicker-expense-filter-startDate" class="dateTimePicker-expense-filter-startDate form-control" value="@Model.FilterStartDate" placeholder="Start Date" />
+            &nbsp;&nbsp;
+            <input type="text" id="dateTimePicker-expense-filter-endDate" name="dateTimePicker-expense-filter-endDate" class="dateTimePicker-expense-filter-endDate form-control" value="@Model.FilterEndDate" placeholder="End Date" />
+            &nbsp;
+            <input type="button" class="btn btn-primary globalFilterClear" value="Clear" />
+            &nbsp;
+            <a href="javascript:;" class="btn bg-blue float-sm-right btn-search" id="searchbutton">
+                <i class="fa fa-search"></i>
+                Search
+            </a>
         </div>
     </form>
 </div>

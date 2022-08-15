@@ -29,3 +29,18 @@ html {
 .famfamfam-flags {
     display: inline-block;
 }
+
+.callout.callout-blue {
+    border-left-color: rgb(0,123,255);
+}
+
+/*Custom CSS starts here*/
+/*el - easy-life*/
+
+.el-bg-color {
+    color:rgb(0,123,255) 
+}
+
+.el-hand{
+    cursor: pointer;
+}

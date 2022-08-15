@@ -1,0 +1,74 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Investment.ShareOrdersListViewModel
+@{ Layout = null; }
+
+<style>
+    .section-title {
+        display: block;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        color: #003e80
+    }
+</style>
+
+<div class="modal fade" id="ShareOrdersCreateModal" tabindex="-1" role="dialog" aria-labelledby="ShareOrdersCreateModalLabel" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Add New Entry"))
+            <form name="shareOrdersForm" role="form" class="form-horizontal">
+                <input type="hidden" id="EL_Financial_Investment_Share_Master_Id" name="EL_Financial_Investment_Share_Master_Id" value="@Model.ShareOrdersDto.EL_Financial_Investment_Share_Master_Id" />
+                <div class="modal-body" style="height:500px; overflow:auto;">
+                    <div class="row col-md-12">
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Order_Date">Order Date</label>
+                            <input id="Share_Order_Date" type="text" name="Share_Order_Date" class="form-control datetimepicker-input" required>
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Average_Price">Average Price</label>
+                            <input id="Share_Average_Price" type="text" name="Share_Average_Price" class="form-control Share_Average_Price" required>
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Quantity">Quantity</label>
+                            <input id="Share_Quantity" type="text" name="Share_Quantity" class="form-control Share_Quantity" required>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12">
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Amount">Amount</label>
+                            <input id="Share_Amount" type="text" name="Share_Amount" class="form-control Share_Amount" required>
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Order_Id">Order Id</label>
+                            <input id="Share_Order_Id" type="text" name="Share_Order_Id" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="Share_App_Order_Id">Application Order Id</label>
+                            <input id="Share_App_Order_Id" type="text" name="Share_App_Order_Id" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12">
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Order_Type">Order Type</label>
+                            @Html.DropDownListFor(m => m.ShareOrdersDto.Share_Order_Type, Html.GetEnumSelectList<EasyLife.EasyLifeEnums.Share_Order_Type>(), new { @class = "form-control Share_Order_Type", @required = "required", @name = "Share_Order_Type" })
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Qty_Exchange_Type">Exchange Type</label>
+                            @Html.DropDownListFor(m => m.ShareOrdersDto.Share_Qty_Exchange_Type, Html.GetEnumSelectList<EasyLife.EasyLifeEnums.Share_Qty_Exchange_Type>(), new { @class = "form-control Share_Qty_Exchange_Type", @required = "required", @name = "Share_Qty_Exchange_Type" })
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Price_Type">Price Type</label>
+                            @Html.DropDownListFor(m => m.ShareOrdersDto.Share_Price_Type, Html.GetEnumSelectList<EasyLife.EasyLifeEnums.Share_Price_Type>(), new { @class = "form-control Share_Price_Type", @required = "required", @name = "Share_Price_Type" })
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Transaction_Type">Transaction Type</label>
+                            @Html.DropDownListFor(m => m.ShareOrdersDto.Share_Transaction_Type, Html.GetEnumSelectList<EasyLife.EasyLifeEnums.Share_Transaction_Type>(), new { @class = "form-control Share_Transaction_Type", @required = "required", @name = "Share_Transaction_Type" })
+                        </div>
+                    </div>
+                </div>
+                @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+            </form>
+        </div>
+    </div>
+</div>

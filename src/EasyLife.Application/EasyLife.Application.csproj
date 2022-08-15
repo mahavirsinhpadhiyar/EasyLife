@@ -12,6 +12,12 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Financial\Earnings\**" />
+    <EmbeddedResource Remove="Financial\Earnings\**" />
+    <None Remove="Financial\Earnings\**" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EasyLife.Core\EasyLife.Core.csproj" />
+    <ProjectReference Include="..\EasyLife.EntityFrameworkCore\EasyLife.EntityFrameworkCore.csproj" />
   </ItemGroup>
 </Project>

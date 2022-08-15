@@ -7,6 +7,16 @@
         public const string Tenants = "Tenants";
         public const string Users = "Users";
         public const string Roles = "Roles";
+
+        #region Financial
         public const string Expenses = "Expenses";
+        public const string Earnings = "Earnings";
+        public const string Investments = "Investments";
+        public const string Financial_ShareMaster = "Share Master";
+        #endregion Financial
+
+        #region Personal
+        public const string EncryptedImportantInformation = "EncryptedImportantInformation";
+        #endregion Personal
     }
 }

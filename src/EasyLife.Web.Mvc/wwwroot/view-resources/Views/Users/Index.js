@@ -103,7 +103,7 @@
         _userService.create(user).done(function () {
             _$modal.modal('hide');
             _$form[0].reset();
-            abp.notify.info(l('SavedSuccessfully'));
+            abp.notify.success(l('SavedSuccessfully'));
             _$usersTable.ajax.reload();
         }).always(function () {
             abp.ui.clearBusy(_$modal);
@@ -128,7 +128,7 @@
                     _userService.delete({
                         id: userId
                     }).done(() => {
-                        abp.notify.info(l('SuccessfullyDeleted'));
+                        abp.notify.success(l('SuccessfullyDeleted'));
                         _$usersTable.ajax.reload();
                     });
                 }

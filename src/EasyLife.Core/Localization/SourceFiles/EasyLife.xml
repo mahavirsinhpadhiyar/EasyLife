@@ -1,12 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
+    <text name="ShareMaster" value="Share Market Master"></text>
+    <text name="Pages_Financial_Investment_Crypto" value="Investment Crypto"></text>
+    <text name="Pages_Financial_Investment_SIP" value="Investment SIP"></text>
+    <text name="Pages_Financial_Investment_ShareMarket" value="Investment Share Master"></text>
+    <text name="Investments" value="Investments"></text>
+    <text name="ShortEncryptedImportantInformation" value="Imp. Information"></text>
+    <text name="EncryptedImportantInformation" value="Encrypted Important Information"></text>
+    <text name="Personal" value="Personal"></text>
+    <text name="EarningsList" value="Earnings List"></text>
+    <text name="Earnings" value="Earnings"></text>
     <text name="ExpensesList" value="Expenses List"></text>
     <text name="Expenses" value="Expenses"></text>
     <text name="Financial" value="Financial"></text>
     <text name="EasyLife" value="Easy Life"></text>
     <text name="Account_Change_Password" value="Change Password"></text>
-    <text name="HomePage" value="Home page" />
+    <text name="HomePage" value="Dashboard" />
     <text name="About" value="About" />
     <text name="WelcomeMessage" value="Welcome to EasyLife!" />
     <text name="FormIsNotValidMessage" value="Form is not valid. Please check and fix errors." />

@@ -8,11 +8,12 @@ namespace EasyLife.Financial.Expenses
     [Table("Expenses")]
     public class Expenses: FullAuditedEntity<Guid>
     {
-        //Short description of the payee or note.
+        //name of the person or place or shop to whom you are giving/spending money.
         public string Payee { get; set; }
         public string Note { get; set; }
         public DateTime ExpenseDate { get; set; }
-        public bool ConsiderInTotal { get; set; }
+        //Expense entry considerintotal having false will not count anywhere in whole application.
+        public bool DoNotConsiderInTotal { get; set; }
         public double Money { get; set; }
         [ForeignKey("ExpenseCategory")]
         public Guid? ExpenseCategoryId { get; set; }

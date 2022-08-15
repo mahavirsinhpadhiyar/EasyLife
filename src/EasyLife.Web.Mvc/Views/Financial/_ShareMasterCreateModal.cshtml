@@ -1,0 +1,31 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Investment.ShareMasterListViewModel
+@{ Layout = null; }
+
+<style>
+    .section-title {
+        display: block;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        color: #003e80
+    }
+</style>
+
+<div class="modal fade" id="ShareMasterCreateModal" tabindex="-1" role="dialog" aria-labelledby="ShareMasterCreateModalLabel" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Add Share Master Name"))
+            <form name="expensesForm" role="form" class="form-horizontal">
+                <div class="modal-body" style="height:500px; overflow:auto;">
+                    <div class="row col-md-12">
+                        <div class="col-md-4 form-group required">
+                            <label for="Share_Name">Share Name</label>
+                            <input id="Share_Name" type="text" name="Share_Name" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+            </form>
+        </div>
+    </div>
+</div>

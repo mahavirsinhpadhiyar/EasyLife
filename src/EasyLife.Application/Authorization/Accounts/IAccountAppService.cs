@@ -7,7 +7,8 @@ namespace EasyLife.Authorization.Accounts
     public interface IAccountAppService : IApplicationService
     {
         Task<IsTenantAvailableOutput> IsTenantAvailable(IsTenantAvailableInput input);
-
         Task<RegisterOutput> Register(RegisterInput input);
+        Task<ForgotPassword> SendPasswordResetCode(ForgotPassword forgotPassword);
+        Task<ResetPassword> ResetPasswordAsync(ResetPassword resetPassword);
     }
 }

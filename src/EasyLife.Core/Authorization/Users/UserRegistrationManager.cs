@@ -37,7 +37,7 @@ namespace EasyLife.Authorization.Users
             AbpSession = NullAbpSession.Instance;
         }
 
-        public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed)
+        public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed, bool shouldChangePasswordOnNextLogin)
         {
             CheckForTenant();
 
@@ -52,7 +52,8 @@ namespace EasyLife.Authorization.Users
                 IsActive = true,
                 UserName = userName,
                 IsEmailConfirmed = isEmailConfirmed,
-                Roles = new List<UserRole>()
+                Roles = new List<UserRole>(),
+                ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin
             };
 
             user.SetNormalizedNames();

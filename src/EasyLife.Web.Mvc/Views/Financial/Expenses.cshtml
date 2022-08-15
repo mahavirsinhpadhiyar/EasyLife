@@ -13,24 +13,28 @@
         z-index: 9999 !important;
     }
 </style>
+<link href="~/css/jquery.datetimepicker.css" rel="stylesheet" />
 
 @section scripts
 {
     <environment names="Development">
+        <script src="~/js/datetimepicker/jquery.datetimepicker.full.js" asp-append-version="true"></script>
         <script src="~/view-resources/Views/Financial/Expenses/Expenses.js" asp-append-version="true"></script>
     </environment>
 
     <environment names="Staging,Production">
         @*Comment as of now because deployment not finding minified files.*@
-        @*<script src="~/view-resources/Views/Financial/Expenses/Expenses.min.js" asp-append-version="true"></script>*@
-        <script src="~/view-resources/Views/Financial/Expenses/Expenses.js" asp-append-version="true"></script>
+        <script src="~/js/datetimepicker/jquery.datetimepicker.full.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Views/Financial/Expenses/Expenses.min.js" asp-append-version="true"></script>
+        @*<script src="~/view-resources/Views/Financial/Expenses/Expenses.js" asp-append-version="true"></script>*@
     </environment>
 }
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-4">
-                <h1>Expenses</h1>
+            <div class="col-sm-12 input-group">
+                <h1>Expenses </h1>
+                <a class="nav-link btnExpensesNotes" href="javascript:;" title="Show/Hide Note"><i class="fas fa-bars"></i></a>
             </div>
         </div>
     </div>
@@ -40,13 +44,17 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+                <div class="callout callout-blue divExpensesNotes">
+                    @*<h5>Note:</h5>*@
+                    <span>Current month expenses : <span style='color:blue'>@Model.CurrentMonthlyExpenses</span></span>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 @await Html.PartialAsync("~/Views/Financial/Expenses.AdvancedSearch.cshtml")
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <a href="javascript:;" data-toggle="modal" data-target="#ExpensesCreateModal" class="btn bg-blue float-sm-right">
                                     <i class="fa fa-plus-square"></i>
                                     @L("Create")
@@ -72,11 +80,11 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <div id="color-calendar"></div>
-                        </div>
-                    </div>
+                    @*<div class="card-body">
+                <div class="table-responsive">
+                    <div id="color-calendar"></div>
+                </div>
+            </div>*@
                 </div>
             </div>
         </div>
@@ -86,23 +94,9 @@
 @await Html.PartialAsync("~/Views/Financial/_ExpensesCreateModal.cshtml", Model)
 
 @*Reference Link https://www.cssscript.com/event-calendar-color/ for calendar*@
-<link href="~/css/event-calendar-color/theme-basic.css" rel="stylesheet" />
+@*<link href="~/css/event-calendar-color/theme-basic.css" rel="stylesheet" />
 <link href="~/css/event-calendar-color/theme-glass.css" rel="stylesheet" />
-<script src="~/js/event-calendar-color/bundle.min.js"></script>
-
-<script>
-
-    //new Calendar({
-    //    id: '#color-calendar',
-    //    eventsData: myEvents,
-    //    dateChanged: (currentDate, DateEvents) => {
-    //        debugger;
-    //    },
-    //    monthChanged: (currentDate, DateEvents) => {
-    //        debugger;
-    //    }
-    //});
-</script>
+<script src="~/js/event-calendar-color/bundle.min.js"></script>*@
 
 <div class="modal fade" id="ExpensesEditModal" tabindex="-1" role="dialog" aria-labelledby="ExpensesEditModalLabel" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">

@@ -12,5 +12,7 @@ namespace EasyLife.Financial.Expenses.Dto
         public string Keyword { get; set; }
         public Guid? CategoryId { get; set; }
         public long? FilterUserId { get; set; }
+        public DateTime? FilterStartDate { get; set; }
+        public DateTime? FilterEndDate { get; set; }
     }
 }

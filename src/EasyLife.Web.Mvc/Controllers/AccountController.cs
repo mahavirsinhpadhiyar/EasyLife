@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Abp;
+﻿using Abp;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Authorization;
 using Abp.Authorization.Users;
@@ -16,7 +8,6 @@ using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.MultiTenancy;
 using Abp.Notifications;
-using Abp.Runtime.Session;
 using Abp.Threading;
 using Abp.Timing;
 using Abp.UI;
@@ -30,6 +21,16 @@ using EasyLife.MultiTenancy;
 using EasyLife.Sessions;
 using EasyLife.Web.Models.Account;
 using EasyLife.Web.Views.Shared.Components.TenantChange;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using EasyLife.Authorization.Accounts;
+using Microsoft.EntityFrameworkCore;
 
 namespace EasyLife.Web.Controllers
 {
@@ -46,6 +47,7 @@ namespace EasyLife.Web.Controllers
         private readonly ISessionAppService _sessionAppService;
         private readonly ITenantCache _tenantCache;
         private readonly INotificationPublisher _notificationPublisher;
+        private readonly IAccountAppService _accountAppService;
 
         public AccountController(
             UserManager userManager,
@@ -58,7 +60,8 @@ namespace EasyLife.Web.Controllers
             UserRegistrationManager userRegistrationManager,
             ISessionAppService sessionAppService,
             ITenantCache tenantCache,
-            INotificationPublisher notificationPublisher)
+            INotificationPublisher notificationPublisher,
+            IAccountAppService accountAppService)
         {
             _userManager = userManager;
             _multiTenancyConfig = multiTenancyConfig;
@@ -71,6 +74,7 @@ namespace EasyLife.Web.Controllers
             _sessionAppService = sessionAppService;
             _tenantCache = tenantCache;
             _notificationPublisher = notificationPublisher;
+            _accountAppService = accountAppService;
         }
 
         #region Login / Logout
@@ -103,10 +107,33 @@ namespace EasyLife.Web.Controllers
 
             var loginResult = await GetLoginResultAsync(loginModel.UsernameOrEmailAddress, loginModel.Password, GetTenancyNameOrNull());
 
+            if (loginResult.Result == AbpLoginResultType.Success)
+            {
+                var user = await _userManager.Users.FirstOrDefaultAsync(s => s.Id == loginResult.User.Id);
+                user.LastLoginTime = DateTime.Now;
+                await _userManager.UpdateAsync(user);
+            }
+
             await _signInManager.SignInAsync(loginResult.Identity, loginModel.RememberMe);
             await UnitOfWorkManager.Current.SaveChangesAsync();
 
-            return Json(new AjaxResponse { TargetUrl = returnUrl });
+            if (returnUrl == "/")
+            {
+                returnUrl = "/Home";
+            }
+
+            if (loginResult.User.ShouldChangePasswordOnNextLogin)
+            {
+                return Json(new AjaxResponse<User>
+                {
+                    TargetUrl = "/account/resetpassword?Id=" + loginResult.User.Id + "&Code=" + loginResult.User.PasswordResetCode,
+                    Result = loginResult.User
+                });
+            }
+            else
+            {
+                return Json(new AjaxResponse<User> { TargetUrl = returnUrl, Result = loginResult.User });
+            }
         }
 
         public async Task<ActionResult> Logout()
@@ -186,7 +213,8 @@ namespace EasyLife.Web.Controllers
                     model.EmailAddress,
                     model.UserName,
                     model.Password,
-                    true // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
+                    false, // Assumed email address is always confirmed. Change this if you want to implement email confirmation.,
+                    true
                 );
 
                 // Getting tenant-specific settings
@@ -466,5 +494,89 @@ namespace EasyLife.Web.Controllers
         }
 
         #endregion
+
+        #region Forgot-Reset-Password
+
+        public ActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
+        {
+            try
+            {
+                Authorization.Accounts.Dto.ForgotPassword forgotPassword = new Authorization.Accounts.Dto.ForgotPassword();
+                forgotPassword = await _accountAppService.SendPasswordResetCode(new Authorization.Accounts.Dto.ForgotPassword() { EmailAddress = forgotPasswordViewModel.EmailAddress, SentSuccessfully = false });
+
+                forgotPasswordViewModel.SentSuccessfully = forgotPassword.SentSuccessfully;
+                if (forgotPasswordViewModel.SentSuccessfully)
+                {
+                    //return RedirectToAction("Login", new { Message="Email send successfully.", IsError=false });
+                    forgotPasswordViewModel.IsError = false;
+                    forgotPasswordViewModel.Message = "Email send successfully.";
+                }
+                else
+                {
+                    forgotPasswordViewModel.SentSuccessfully = false;
+                    forgotPasswordViewModel.IsError = true;
+                    forgotPasswordViewModel.Message = "There is some error in API.";
+                }
+            }
+            catch (Exception ex)
+            {
+                forgotPasswordViewModel.SentSuccessfully = false;
+                forgotPasswordViewModel.IsError = true;
+                forgotPasswordViewModel.Message = ex.Message;
+            }
+            return Json(forgotPasswordViewModel);
+        }
+
+        public ActionResult ResetPassword(int Id, string Code)
+        {
+            return View(new ResetPasswordViewModel()
+            {
+                UserId = Id,
+                ResetCode = Code
+            });
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            try
+            {
+                Authorization.Accounts.Dto.ResetPassword resetPassword = new Authorization.Accounts.Dto.ResetPassword();
+                resetPassword.UserId = resetPasswordViewModel.UserId;
+                resetPassword.NewPassword = resetPasswordViewModel.NewPassword;
+                resetPassword.ResetCode = resetPasswordViewModel.ResetCode;
+
+                resetPassword = await _accountAppService.ResetPasswordAsync(resetPassword);
+
+                resetPasswordViewModel.PasswordChangedSuccessfully = resetPassword.PasswordChangedSuccessfully;
+                if (resetPasswordViewModel.PasswordChangedSuccessfully)
+                {
+                    //return RedirectToAction("Login", new { Message="Email send successfully.", IsError=false });
+                    resetPasswordViewModel.IsError = false;
+                    resetPasswordViewModel.Message = "Password changed successfully.";
+                }
+                else
+                {
+                    resetPasswordViewModel.PasswordChangedSuccessfully = false;
+                    resetPasswordViewModel.IsError = true;
+                    resetPasswordViewModel.Message = resetPassword.ErrorMessage;
+                }
+            }
+            catch (Exception ex)
+            {
+                resetPasswordViewModel.PasswordChangedSuccessfully = false;
+                resetPasswordViewModel.IsError = true;
+                resetPasswordViewModel.Message = ex.Message;
+            }
+            return Json(resetPasswordViewModel);
+        }
+
+        #endregion Forgot-Reset-Password
     }
 }

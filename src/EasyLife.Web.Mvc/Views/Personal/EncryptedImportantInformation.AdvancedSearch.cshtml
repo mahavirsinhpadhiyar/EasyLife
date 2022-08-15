@@ -1,0 +1,19 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Personal.EncryptedImportantThings.ImportantInformationListViewModel
+<div class="abp-advanced-search">
+    <form id="EncryptedImportantInformationSearchForm" class="form-horizontal">
+        <div class="input-group">
+            <input type="text" name="Keyword" class="form-control txt-search" placeholder="Search" />
+            <div class="input-group-prepend">
+                <button type="button" class="btn bg-white btn-search border-1" id="searchbutton">
+                    <span class="fas fa-search" aria-hidden="true"></span>
+                </button>
+            </div>
+            &nbsp;
+            @if (User.IsInRole(EasyLife.Authorization.Roles.StaticRoleNames.Host.Admin))
+            {
+                Model.UsersList.Insert(0, new SelectListItem() { Text = "-- All Users --", Value = "" });
+@Html.DropDownList("FilterUserId", Model.UsersList, new { @class = "form-control", @required = "required", @name = "FilterUserId" })}
+        </div>
+    </form>
+</div>

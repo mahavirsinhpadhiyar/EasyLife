@@ -13,7 +13,8 @@ namespace EasyLife.Financial.Expenses
     public interface IExpensesAppService : IAsyncCrudAppService<CreateOrEditExpensesDto, Guid, PagedExpensesResultRequestDto, CreateOrEditExpensesDto, CreateOrEditExpensesDto>
     {
         Task<CreateOrEditExpensesDto> GetExpensesForEdit(EntityDto<Guid> input);
-        List<SelectListItem> GetExpenseCategoriesList();
+        Task<List<SelectListItem>> GetExpenseCategoriesListAsync();
         List<CalendarEvents> GetCalendarExpenses();
+        Task<string> DashboardTotalExpensesSum(DateTime? monthStartDate, DateTime? monthEndDate);
     }
 }

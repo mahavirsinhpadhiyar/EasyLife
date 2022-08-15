@@ -154,5 +154,35 @@
     "inputFiles": [
       "wwwroot/view-resources/Views/Financial/Expenses/Expenses.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Earnings/Earnings.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Earnings/Earnings.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Personal/EncryptedImportantInformation.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Personal/EncryptedImportantInformation.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Investment/ShareMaster.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Investment/ShareMaster.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Investment/ShareOrders.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Investment/ShareOrders.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Investment/_barChartShareMarket.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Investment/_barChartShareMarket.js"
+    ]
   }
 ]

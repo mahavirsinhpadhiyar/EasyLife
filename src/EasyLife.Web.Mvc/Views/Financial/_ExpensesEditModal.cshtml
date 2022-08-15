@@ -11,10 +11,17 @@
     }
 </style>
 
-@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Expenses"))
+@if (Model.Expenses.Id == Guid.Empty)
+{
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Duplicate Expenses"));
+}
+else
+{
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Expenses"));
+}
 <form name="expensesForm" role="form" class="form-horizontal">
     <div class="modal-body" style="height:500px; overflow:auto;">
-        <input type="hidden" id="ExpensesId" name="Id" value="@Model.Expenses.Id"/>
+        <input type="hidden" id="ExpensesId" name="Id" value="@Model.Expenses.Id" />
         <div class="row col-md-12">
             <div class="col-md-4 form-group required">
                 <label for="Payee">Payee</label>
@@ -26,7 +33,7 @@
             </div>
             <div class="col-md-4 form-group required">
                 <label for="ExpenseDate">Date</label>
-                <input id="EditExpenseDate" type="text" name="ExpenseDate" class="form-control datetimepicker-input-edit" value="@Model.Expenses.ExpenseDate.ToString("MM/dd/yyyy")" required>
+                <input id="EditExpenseDate" type="text" name="ExpenseDate" class="form-control datetimepicker-input-edit" value="@Model.Expenses.ExpenseDate.ToString("yyyy/MM/dd HH:mm")" required>
             </div>
         </div>
 
@@ -40,11 +47,13 @@
                     {
                         if (Model.Expenses.ExpenseCategoryId.ToString().ToLower() == item.Value.ToLower())
                         {
-        <option value="@item.Value" selected="selected">@item.Text</option> }
-                        else
-                        {
-        <option value="@item.Value">@item.Text</option>}
-                    }
+        <option value="@item.Value" selected="selected">@item.Text</option>
+ }
+    else
+    {
+<option value="@item.Value">@item.Text</option>
+}
+}
                 </select>
             </div>
         </div>
@@ -52,9 +61,28 @@
         <div class="row col-md-12">
             <div class="col-md-12 form-group">
                 <label for="Note">Note</label>
-                <textarea id="EditNote" type="text" name="Note" class="form-control">@Model.Expenses.Note</textarea>
+                <textarea id="EditNote" type="text" name="Note" class="form-control" style="height: 200px">@Model.Expenses.Note</textarea>
             </div>
         </div>
+
+        @if (Model.LoggedInUserIsAdmin == EasyLife.Authorization.Roles.RoleEnums.Roles.Admin || Model.LoggedInUserIsAdmin == EasyLife.Authorization.Roles.RoleEnums.Roles.SuperAdmin)
+        {
+<div class="row col-md-12">
+    <div class="col-md-12 form-group">
+        <div class="custom-control custom-checkbox">
+            @*@Html.CheckBoxFor(m => Model.Expenses.DoNotConsiderInTotal, new { @class = "custom-control-input", @Name = "EditDoNotConsiderInTotal" })*@
+            @if (Model.Expenses.DoNotConsiderInTotal)
+            {
+                <input class="custom-control-input" type="checkbox" id="EditDoNotConsiderInTotal" name="DoNotConsiderInTotal" checked="checked"/>
+            }
+            else
+            {
+                <input class="custom-control-input" type="checkbox" id="EditDoNotConsiderInTotal" name="DoNotConsiderInTotal" />
+            }
+            <label for="EditDoNotConsiderInTotal" class="custom-control-label">Do Not Consider in Total</label>
+        </div>
+    </div>
+</div>}
     </div>
     @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
 </form>

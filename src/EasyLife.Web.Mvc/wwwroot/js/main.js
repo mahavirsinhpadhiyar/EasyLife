@@ -1,4 +1,8 @@
-﻿(function ($) {
+﻿function toMoneySymbol(value) {
+    return "₹ " + value;
+}
+
+(function ($) {
     //Notification handler
     abp.event.on('abp.notifications.received', function (userNotification) {
         abp.notifications.showUiNotifyForUserNotification(userNotification);
@@ -130,4 +134,9 @@
         });
         $this[0].reset();
     };
+
+    $(".globalFilterClear").click(function () {
+        $(this).parent("div").find(":input[type='text']").val("");
+        $(this).parent("div").find('select').val("");
+    });
 })(jQuery);

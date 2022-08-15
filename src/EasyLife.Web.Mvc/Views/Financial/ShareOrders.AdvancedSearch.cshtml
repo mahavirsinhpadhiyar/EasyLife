@@ -1,0 +1,19 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Investment.ShareOrdersListViewModel
+<div class="abp-advanced-search">
+    <form id="ShareOrdersSearchForm" class="form-horizontal">
+        <div class="input-group">
+            &nbsp;&nbsp;
+            <input type="text" id="dateTimePicker-share-order-filter-startDate" name="dateTimePicker-share-order-filter-startDate" class="dateTimePicker-share-order-filter-startDate form-control" value="@Model.FilterStartDate" placeholder="Start Date" />
+            &nbsp;&nbsp;
+            <input type="text" id="dateTimePicker-share-order-filter-endDate" name="dateTimePicker-share-order-filter-endDate" class="dateTimePicker-share-order-filter-endDate form-control" value="@Model.FilterEndDate" placeholder="End Date" />
+            &nbsp;
+            <input type="button" class="btn btn-primary globalFilterClear" value="Clear" />
+            &nbsp;
+            <a href="javascript:;" class="btn bg-blue float-sm-right btn-search" id="searchbutton">
+                <i class="fa fa-search"></i>
+                Search
+            </a>
+        </div>
+    </form>
+</div>

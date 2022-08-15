@@ -5,6 +5,7 @@ using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using EasyLife.Authorization;
+using EasyLife.Authorization.Users;
 using EasyLife.Financial.Expenses.Dto;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -25,15 +26,18 @@ namespace EasyLife.Financial.Expenses
     {
         private readonly IRepository<Expenses, Guid> _expensesRepository;
         private readonly IRepository<ExpenseCategory, Guid> _expenseCategoryRepository;
+        private readonly UserManager _userManager;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="expensesRepository"></param>
         /// <param name="expenseCategoryRepository"></param>
-        public ExpensesAppService(IRepository<Expenses, Guid> expensesRepository, IRepository<ExpenseCategory, Guid> expenseCategoryRepository) : base(expensesRepository)
+        /// /// <param name="userManager"></param>
+        public ExpensesAppService(IRepository<Expenses, Guid> expensesRepository, IRepository<ExpenseCategory, Guid> expenseCategoryRepository, UserManager userManager) : base(expensesRepository)
         {
             _expensesRepository = expensesRepository;
             _expenseCategoryRepository = expenseCategoryRepository;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -53,14 +57,24 @@ namespace EasyLife.Financial.Expenses
             expensesList = query
                 .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Payee.Contains(input.Keyword))
                 .WhereIf(input.CategoryId != null && input.CategoryId != Guid.Empty, x => x.ExpenseCategory.Id == input.CategoryId)
+                .WhereIf(input.FilterStartDate.HasValue, x => x.ExpenseDate >= input.FilterStartDate.Value)
+                .WhereIf(input.FilterEndDate.HasValue, x => x.ExpenseDate <= input.FilterEndDate.Value)
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount)
                 .OrderByDescending(e => e.ExpenseDate)
                 .ToList();
 
+            var pageCount = query
+                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Payee.Contains(input.Keyword))
+                .WhereIf(input.CategoryId != null && input.CategoryId != Guid.Empty, x => x.ExpenseCategory.Id == input.CategoryId)
+                .WhereIf(input.FilterStartDate.HasValue, x => x.ExpenseDate >= input.FilterStartDate.Value)
+                .WhereIf(input.FilterEndDate.HasValue, x => x.ExpenseDate <= input.FilterEndDate.Value)
+                .OrderByDescending(e => e.ExpenseDate)
+                .Count();
+
             var expensesFilterList = expensesList.Select(r => new CreateOrEditExpensesDto()
             {
-                ConsiderInTotal = r.ConsiderInTotal,
+                DoNotConsiderInTotal = r.DoNotConsiderInTotal,
                 Payee = r.Payee,
                 ExpenseCategoryId = r.ExpenseCategoryId,
                 ExpenseDate = r.ExpenseDate,
@@ -71,7 +85,7 @@ namespace EasyLife.Financial.Expenses
                 UserId = r.UserId
             }).ToList();
 
-            var result = new PagedResultDto<CreateOrEditExpensesDto>(query.Count(), expensesFilterList);
+            var result = new PagedResultDto<CreateOrEditExpensesDto>(pageCount, expensesFilterList);
             return Task.FromResult(result);
         }
 
@@ -85,7 +99,7 @@ namespace EasyLife.Financial.Expenses
         {
             if (input.Sorting.IsNullOrEmpty() || input.Sorting == "0 asc")
             {
-                input.Sorting = "Payee desc";
+                input.Sorting = "ExpenseDate desc";
             }
             return base.ApplySorting(query, input);
         }
@@ -99,7 +113,8 @@ namespace EasyLife.Financial.Expenses
         {
             try
             {
-                input.ExpenseDate = new DateTime(input.ExpenseDate.Year, input.ExpenseDate.Month, input.ExpenseDate.Day);
+                //DateTime dt = DateTime.Now;
+                //input.ExpenseDate = new DateTime(input.ExpenseDate.Year, input.ExpenseDate.Month, input.ExpenseDate.Day);
                 input.UserId = AbpSession.UserId.Value;
                 var expenses = ObjectMapper.Map<Expenses>(input);
                 await _expensesRepository.InsertAsync(expenses);
@@ -120,12 +135,23 @@ namespace EasyLife.Financial.Expenses
         {
             try
             {
-                input.ExpenseDate = new DateTime(input.ExpenseDate.Year, input.ExpenseDate.Month, input.ExpenseDate.Day);
-                input.UserId = AbpSession.UserId.Value;
-                var expenses = await _expensesRepository.GetAsync(input.Id);
-                ObjectMapper.Map(input, expenses);
-                await _expensesRepository.UpdateAsync(expenses);
-                return MapToEntityDto(expenses);
+                //For duplicate entry
+                if (input.Id == Guid.Empty)
+                {
+                    input.UserId = AbpSession.UserId.Value;
+                    var expenses = ObjectMapper.Map<Expenses>(input);
+                    expenses.Id = await _expensesRepository.InsertAndGetIdAsync(expenses);
+                    return MapToEntityDto(expenses);
+                }
+                else
+                {
+                    //input.ExpenseDate = new DateTime(input.ExpenseDate.Year, input.ExpenseDate.Month, input.ExpenseDate.Day);
+                    input.UserId = AbpSession.UserId.Value;
+                    var expenses = await _expensesRepository.GetAsync(input.Id);
+                    ObjectMapper.Map(input, expenses);
+                    await _expensesRepository.UpdateAsync(expenses);
+                    return MapToEntityDto(expenses);
+                }
             }
             catch (Exception ex)
             {
@@ -148,16 +174,28 @@ namespace EasyLife.Financial.Expenses
         /// <summary>
         /// Returns list of ExpenseCategories
         /// </summary>
-        /// <param name="RinkId"></param>
         /// <returns></returns>
-        public List<SelectListItem> GetExpenseCategoriesList()
+        public async Task<List<SelectListItem>> GetExpenseCategoriesListAsync()
         {
-            return _expenseCategoryRepository.GetAll().OrderByDescending(e => e.CategoryName).Select(r =>
-            new SelectListItem()
+            var user = await _userManager.GetUserByIdAsync(AbpSession.UserId.Value);
+            if (await _userManager.IsInRoleAsync(user, EasyLife.Authorization.Roles.StaticRoleNames.Host.Admin))
             {
-                Text = r.CategoryName,
-                Value = r.Id.ToString()
-            }).ToList();
+                return _expenseCategoryRepository.GetAll().OrderBy(e => e.CategoryName).Select(r =>
+                new SelectListItem()
+                {
+                    Text = r.CategoryName,
+                    Value = r.Id.ToString()
+                }).ToList();
+            }
+            else
+            {
+                return _expenseCategoryRepository.GetAll().Where(e => e.IsActive == true && e.IsForMeActive == false).OrderBy(e => e.CategoryName).Select(r =>
+                new SelectListItem()
+                {
+                    Text = r.CategoryName,
+                    Value = r.Id.ToString()
+                }).ToList();
+            }
         }
 
         /// <summary>
@@ -175,6 +213,26 @@ namespace EasyLife.Financial.Expenses
                 Description = e.Note,
                 Name = e.Payee
             }).ToList();
+        }
+        /// <summary>
+        /// Returns total of all expenses
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> DashboardTotalExpensesSum(DateTime? monthStartDate, DateTime? monthEndDate)
+        {
+            monthStartDate = monthStartDate.HasValue ? monthStartDate.Value : new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            monthEndDate = monthEndDate.HasValue ? monthEndDate.Value : monthStartDate.Value.AddMonths(1).AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59);
+            return _expensesRepository.GetAll().Where(e => e.ExpenseDate >= monthStartDate && e.ExpenseDate <= monthEndDate && e.UserId == AbpSession.UserId && !e.DoNotConsiderInTotal).SumAsync(e => e.Money).Result.ToLocalMoneyFormat();
+        }
+        /// <summary>
+        /// Deletes the expense
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public override async Task DeleteAsync(EntityDto<Guid> input)
+        {
+            var expenseDetails = await _expensesRepository.GetAsync(input.Id);
+            await _expensesRepository.HardDeleteAsync(expenseDetails);
         }
     }
 }

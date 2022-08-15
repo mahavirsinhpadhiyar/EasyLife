@@ -13,7 +13,7 @@ namespace EasyLife
         /// Gets current version of the application.
         /// It's also shown in the web page.
         /// </summary>
-        public const string Version = "0.0.0.1";
+        public const string Version = "0.0.0.6";
 
         /// <summary>
         /// Gets release (last build) date of the application.

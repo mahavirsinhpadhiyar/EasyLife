@@ -58,105 +58,135 @@ namespace EasyLife.Web.Startup
                     new MenuItemDefinition(
                         "Financial",
                         L("Financial"),
-                        icon: "fas fa-money"
+                        icon: "fas fa-rupee-sign"
                     ).AddItem(
-                        new MenuItemDefinition(
-                            "Expenses",
-                            new FixedLocalizableString("Expenses"),
-                            icon: "fas fa-rupee-sign"
-                        ).AddItem(
                             new MenuItemDefinition(
                                 PageNames.Expenses,
-                                L("ExpensesList"),
+                                L("Expenses"),
                                 url: "Financial/Expenses",
-                                icon: "fas fa-list",
+                                icon: "fas fa-rupee-sign",
                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Financial_Expenses)
                             )
-                        )
+                    ).AddItem(
+                            new MenuItemDefinition(
+                                PageNames.Earnings,
+                                L("Earnings"),
+                                url: "Financial/Earnings",
+                                icon: "fas fa-rupee-sign",
+                                permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Financial_Earnings)
+                            )
+                    ).AddItem(
+                        new MenuItemDefinition(
+                                    "Investments",
+                                    L("Investments"),
+                                    icon: "fas fa-piggy-bank"
+                                ).AddItem(
+                            new MenuItemDefinition(
+                                PageNames.Investments,
+                                L("ShareMaster"),
+                                url: "Financial/ShareMaster",
+                                icon: "fas fa-rupee-sign",
+                                permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Financial_Investment_ShareMarket)
+                            )
+                    )
+                            )
+                ).AddItem(       //Personal Menu
+                    new MenuItemDefinition(
+                        "Personal",
+                        L("Personal"),
+                        icon: "fas fa-user"
+                    ).AddItem(
+                            new MenuItemDefinition(
+                                PageNames.EncryptedImportantInformation,
+                                L("ShortEncryptedImportantInformation"),
+                                url: "Personal/EncryptedImportantInformationList",
+                                icon: "fas fa-sticky-note",
+                                permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Personal_EncryptedImportantInformation)
+                            )
                     )
                 );
-                //.AddItem( // Menu items below is just for demonstration!
-                //    new MenuItemDefinition(
-                //        "MultiLevelMenu",
-                //        L("MultiLevelMenu"),
-                //        icon: "fas fa-circle"
-                //    ).AddItem(
-                //        new MenuItemDefinition(
-                //            "AspNetBoilerplate",
-                //            new FixedLocalizableString("ASP.NET Boilerplate"),
-                //            icon: "far fa-circle"
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetBoilerplateHome",
-                //                new FixedLocalizableString("Home"),
-                //                url: "https://aspnetboilerplate.com?ref=abptmpl",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetBoilerplateTemplates",
-                //                new FixedLocalizableString("Templates"),
-                //                url: "https://aspnetboilerplate.com/Templates?ref=abptmpl",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetBoilerplateSamples",
-                //                new FixedLocalizableString("Samples"),
-                //                url: "https://aspnetboilerplate.com/Samples?ref=abptmpl",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetBoilerplateDocuments",
-                //                new FixedLocalizableString("Documents"),
-                //                url: "https://aspnetboilerplate.com/Pages/Documents?ref=abptmpl",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        )
-                //    ).AddItem(
-                //        new MenuItemDefinition(
-                //            "AspNetZero",
-                //            new FixedLocalizableString("ASP.NET Zero"),
-                //            icon: "far fa-circle"
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetZeroHome",
-                //                new FixedLocalizableString("Home"),
-                //                url: "https://aspnetzero.com?ref=abptmpl",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetZeroFeatures",
-                //                new FixedLocalizableString("Features"),
-                //                url: "https://aspnetzero.com/Features?ref=abptmpl",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetZeroPricing",
-                //                new FixedLocalizableString("Pricing"),
-                //                url: "https://aspnetzero.com/Pricing?ref=abptmpl#pricing",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetZeroFaq",
-                //                new FixedLocalizableString("Faq"),
-                //                url: "https://aspnetzero.com/Faq?ref=abptmpl",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        ).AddItem(
-                //            new MenuItemDefinition(
-                //                "AspNetZeroDocuments",
-                //                new FixedLocalizableString("Documents"),
-                //                url: "https://aspnetzero.com/Documents?ref=abptmpl",
-                //                icon: "far fa-dot-circle"
-                //            )
-                //        )
-                //    )
-                //);
+            //.AddItem( // Menu items below is just for demonstration!
+            //    new MenuItemDefinition(
+            //        "MultiLevelMenu",
+            //        L("MultiLevelMenu"),
+            //        icon: "fas fa-circle"
+            //    ).AddItem(
+            //        new MenuItemDefinition(
+            //            "AspNetBoilerplate",
+            //            new FixedLocalizableString("ASP.NET Boilerplate"),
+            //            icon: "far fa-circle"
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetBoilerplateHome",
+            //                new FixedLocalizableString("Home"),
+            //                url: "https://aspnetboilerplate.com?ref=abptmpl",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetBoilerplateTemplates",
+            //                new FixedLocalizableString("Templates"),
+            //                url: "https://aspnetboilerplate.com/Templates?ref=abptmpl",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetBoilerplateSamples",
+            //                new FixedLocalizableString("Samples"),
+            //                url: "https://aspnetboilerplate.com/Samples?ref=abptmpl",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetBoilerplateDocuments",
+            //                new FixedLocalizableString("Documents"),
+            //                url: "https://aspnetboilerplate.com/Pages/Documents?ref=abptmpl",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        )
+            //    ).AddItem(
+            //        new MenuItemDefinition(
+            //            "AspNetZero",
+            //            new FixedLocalizableString("ASP.NET Zero"),
+            //            icon: "far fa-circle"
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetZeroHome",
+            //                new FixedLocalizableString("Home"),
+            //                url: "https://aspnetzero.com?ref=abptmpl",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetZeroFeatures",
+            //                new FixedLocalizableString("Features"),
+            //                url: "https://aspnetzero.com/Features?ref=abptmpl",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetZeroPricing",
+            //                new FixedLocalizableString("Pricing"),
+            //                url: "https://aspnetzero.com/Pricing?ref=abptmpl#pricing",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetZeroFaq",
+            //                new FixedLocalizableString("Faq"),
+            //                url: "https://aspnetzero.com/Faq?ref=abptmpl",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        ).AddItem(
+            //            new MenuItemDefinition(
+            //                "AspNetZeroDocuments",
+            //                new FixedLocalizableString("Documents"),
+            //                url: "https://aspnetzero.com/Documents?ref=abptmpl",
+            //                icon: "far fa-dot-circle"
+            //            )
+            //        )
+            //    )
+            //);
         }
 
         private static ILocalizableString L(string name)

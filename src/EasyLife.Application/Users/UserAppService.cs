@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
@@ -15,13 +10,20 @@ using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
 using EasyLife.Authorization;
-using EasyLife.Authorization.Accounts;
 using EasyLife.Authorization.Roles;
 using EasyLife.Authorization.Users;
 using EasyLife.Roles.Dto;
 using EasyLife.Users.Dto;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Abp.Net.Mail;
+using Microsoft.Extensions.Configuration;
+using EasyLife.Configuration;
 
 namespace EasyLife.Users
 {
@@ -34,6 +36,8 @@ namespace EasyLife.Users
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IAbpSession _abpSession;
         private readonly LogInManager _logInManager;
+        private readonly IEmailSender _emailSender;
+        private readonly IConfigurationRoot _appConfiguration;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -42,7 +46,9 @@ namespace EasyLife.Users
             IRepository<Role> roleRepository,
             IPasswordHasher<User> passwordHasher,
             IAbpSession abpSession,
-            LogInManager logInManager)
+            LogInManager logInManager,
+            IEmailSender emailSender,
+            IAppConfigurationAccessor appConfiguration)
             : base(repository)
         {
             _userManager = userManager;
@@ -51,29 +57,51 @@ namespace EasyLife.Users
             _passwordHasher = passwordHasher;
             _abpSession = abpSession;
             _logInManager = logInManager;
+            _emailSender = emailSender;
+            _appConfiguration = appConfiguration.Configuration;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
         {
-            CheckCreatePermission();
-
-            var user = ObjectMapper.Map<User>(input);
-
-            user.TenantId = AbpSession.TenantId;
-            user.IsEmailConfirmed = true;
-
-            await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
-
-            CheckErrors(await _userManager.CreateAsync(user, input.Password));
-
-            if (input.RoleNames != null)
+            try
             {
-                CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+                CheckCreatePermission();
+
+                var user = ObjectMapper.Map<User>(input);
+
+                user.TenantId = AbpSession.TenantId;
+                user.IsEmailConfirmed = false;
+                user.SetNewPasswordResetCode();
+                user.Password = _passwordHasher.HashPassword(user, Guid.NewGuid().ToString());
+                user.IsActive = true;
+                user.UserName = user.EmailAddress;
+
+                await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
+
+                CheckErrors(await _userManager.CreateAsync(user, input.Password));
+
+                if (input.RoleNames != null)
+                {
+                    CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+                }
+
+                CurrentUnitOfWork.SaveChanges();
+
+                user.SetNewPasswordResetCode();
+                var url = _appConfiguration["App:MvcRootAddress"] + $"account/resetpassword?Id={user.Id}&Code={user.PasswordResetCode}";
+                //await _emailSender.SendAsync(
+                //        to: input.EmailAddress,
+                //        subject: "EasyLife Registration!",
+                //        body: $"Dear <b>{input.Name},</b> <br/>Congratulations on joining our EasyLife! Make the most of your life easy here by just Signing In <b>{input.UserName}</b> as a Username for login after reset password by using the link given below.<br/><br/><b><a href='{url}'>{url}<a/></b> <br/> Live Easy with EasyLife. :) <br/> Regards, <br/> Mahavirsinh Padhiyar <br/> <b>CEO, EasyLife</b> <br/> <b>E.</b> contact@easy-life.site<br/> <b>W.</b> https://www.easy-life.site",
+                //        isBodyHtml: true
+                //    );
+
+                return MapToEntityDto(user);
             }
-
-            CurrentUnitOfWork.SaveChanges();
-
-            return MapToEntityDto(user);
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public override async Task<UserDto> UpdateAsync(UserDto input)
@@ -196,7 +224,7 @@ namespace EasyLife.Users
             {
                 throw new Exception("There is no current user!");
             }
-            
+
             if (await _userManager.CheckPasswordAsync(user, input.CurrentPassword))
             {
                 CheckErrors(await _userManager.ChangePasswordAsync(user, input.NewPassword));
@@ -218,19 +246,19 @@ namespace EasyLife.Users
             {
                 throw new UserFriendlyException("Please log in before attempting to reset password.");
             }
-            
+
             var currentUser = await _userManager.GetUserByIdAsync(_abpSession.GetUserId());
             var loginAsync = await _logInManager.LoginAsync(currentUser.UserName, input.AdminPassword, shouldLockout: false);
             if (loginAsync.Result != AbpLoginResultType.Success)
             {
                 throw new UserFriendlyException("Your 'Admin Password' did not match the one on record.  Please try again.");
             }
-            
+
             if (currentUser.IsDeleted || !currentUser.IsActive)
             {
                 return false;
             }
-            
+
             var roles = await _userManager.GetRolesAsync(currentUser);
             if (!roles.Contains(StaticRoleNames.Tenants.Admin))
             {
@@ -245,6 +273,15 @@ namespace EasyLife.Users
             }
 
             return true;
+        }
+
+        public async Task<List<SelectListItem>> GetUsersList()
+        {
+            return await Repository.GetAll().Select(u => new SelectListItem()
+            {
+                Text = u.FullName,
+                Value = u.Id.ToString()
+            }).ToListAsync();
         }
     }
 }
