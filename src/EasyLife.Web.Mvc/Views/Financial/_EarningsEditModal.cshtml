@@ -11,7 +11,15 @@
     }
 </style>
 
+@if (Model.Earnings.Id == Guid.Empty)
+{
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Duplicate Earnings"));
+}
+else
+{
 @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Earnings"))
+}
+
 <form name="earningsForm" role="form" class="form-horizontal">
     <div class="modal-body" style="height:500px; overflow:auto;">
         <input type="hidden" id="EarningsId" name="Id" value="@Model.Earnings.Id" />

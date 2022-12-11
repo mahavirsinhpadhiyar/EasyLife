@@ -423,7 +423,6 @@ namespace EasyLife.Web.Controllers
         #endregion
 
         #region Common
-
         private string GetTenancyNameOrNull()
         {
             if (!AbpSession.TenantId.HasValue)

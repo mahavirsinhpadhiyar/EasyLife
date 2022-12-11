@@ -19,9 +19,9 @@ namespace EasyLife.Personal.EncryptedImportantThings
     /// Manages personal important information
     /// </summary>
     [AbpAuthorize(PermissionNames.Pages_Personal_EncryptedImportantInformation)]
-    public class EncryptedImportantInformationAppService : AsyncCrudAppService<Personal.EncryptedImportantThings.EncryptedImportantInformation, CreateOrEditEncryptedImportantInformationDto, Guid, PagedEncryptedImportantInformationResultRequestDto, CreateOrEditEncryptedImportantInformationDto, CreateOrEditEncryptedImportantInformationDto>, IEncryptedImportantInformationAppService
+    public class EncryptedImportantInformationAppService : AsyncCrudAppService<EncryptedImportantInformation, CreateOrEditEncryptedImportantInformationDto, Guid, PagedEncryptedImportantInformationResultRequestDto, CreateOrEditEncryptedImportantInformationDto, CreateOrEditEncryptedImportantInformationDto>, IEncryptedImportantInformationAppService
     {
-        private readonly IRepository<Personal.EncryptedImportantThings.EncryptedImportantInformation, Guid> _encryptedImportantInformationRepository;
+        private readonly IRepository<EncryptedImportantInformation, Guid> _encryptedImportantInformationRepository;
         private readonly UserManager _userManager;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace EasyLife.Personal.EncryptedImportantThings
         /// </summary>
         /// <param name="encryptedImportantInformationRepository"></param>
         /// <param name="userManager"></param>
-        public EncryptedImportantInformationAppService(IRepository<Personal.EncryptedImportantThings.EncryptedImportantInformation, Guid> encryptedImportantInformationRepository, UserManager userManager) : base(encryptedImportantInformationRepository)
+        public EncryptedImportantInformationAppService(IRepository<EncryptedImportantInformation, Guid> encryptedImportantInformationRepository, UserManager userManager) : base(encryptedImportantInformationRepository)
         {
             _encryptedImportantInformationRepository = encryptedImportantInformationRepository;
             _userManager = userManager;
@@ -41,7 +41,7 @@ namespace EasyLife.Personal.EncryptedImportantThings
         /// <returns></returns>
         public Task<PagedResultDto<CreateOrEditEncryptedImportantInformationDto>> GetAllFiltered(PagedEncryptedImportantInformationResultRequestDto input)
         {
-            var encryptedImportantInformationList = new List<Personal.EncryptedImportantThings.EncryptedImportantInformation>();
+            var encryptedImportantInformationList = new List<EncryptedImportantInformation>();
             if (input.FilterUserId == null || input.FilterUserId == 0)
                 input.FilterUserId = AbpSession.UserId;
             var query = _encryptedImportantInformationRepository.GetAll().Where(x => x.UserId == input.FilterUserId);
@@ -49,14 +49,14 @@ namespace EasyLife.Personal.EncryptedImportantThings
             query = ApplySorting(query, input);
 
             encryptedImportantInformationList = query
-                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Title.Contains(input.Keyword))
+                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Title.ToLower().Contains(input.Keyword.ToLower()))
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount)
                 .OrderByDescending(e => e.CreationTime)
                 .ToList();
 
             var pageCount = query
-                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Title.Contains(input.Keyword))
+                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Title.ToLower().Contains(input.Keyword.ToLower()))
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount)
                 .OrderByDescending(e => e.CreationTime)
@@ -81,7 +81,7 @@ namespace EasyLife.Personal.EncryptedImportantThings
         /// <param name="query"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override IQueryable<Personal.EncryptedImportantThings.EncryptedImportantInformation> ApplySorting(IQueryable<Personal.EncryptedImportantThings.EncryptedImportantInformation> query, PagedEncryptedImportantInformationResultRequestDto input)
+        protected override IQueryable<EncryptedImportantInformation> ApplySorting(IQueryable<EncryptedImportantInformation> query, PagedEncryptedImportantInformationResultRequestDto input)
         {
             if (input.Sorting.IsNullOrEmpty() || input.Sorting == "0 asc")
             {
@@ -101,7 +101,7 @@ namespace EasyLife.Personal.EncryptedImportantThings
             {
                 input.UserId = AbpSession.UserId.Value;
                 input.EncryptedText = EncryptDecryptString.EncryptString(input.EncryptedText);
-                var encryptedImportantInformation = ObjectMapper.Map<Personal.EncryptedImportantThings.EncryptedImportantInformation>(input);
+                var encryptedImportantInformation = ObjectMapper.Map<EncryptedImportantInformation>(input);
                 await _encryptedImportantInformationRepository.InsertAsync(encryptedImportantInformation);
                 return MapToEntityDto(encryptedImportantInformation);
             }

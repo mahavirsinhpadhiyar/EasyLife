@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace EasyLife.Financial.Investments.ShareMarket.Services.Interfaces
 {
+    /// <summary>
+    /// Share Master interface
+    /// </summary>
     public interface IShareMasterAppService : IAsyncCrudAppService<CreateOrEditShareMasterDto, Guid, PagedShareMasterResultRequestDto, CreateOrEditShareMasterDto, CreateOrEditShareMasterDto>
     {
         Task<CreateOrEditShareMasterDto> GetShareMasterForEdit(EntityDto<Guid> input);

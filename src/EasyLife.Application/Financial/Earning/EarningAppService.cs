@@ -55,7 +55,7 @@ namespace EasyLife.Financial.Earning
             query = ApplySorting(query, input);
                 
             earningsList = query
-                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Payee.Contains(input.Keyword))
+                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Payee.ToLower().Contains(input.Keyword.ToLower()))
                 .WhereIf(input.CategoryId != null && input.CategoryId != Guid.Empty, x => x.EarningCategory.Id == input.CategoryId)
                 .WhereIf(input.FilterStartDate.HasValue, x => x.EarningDate >= input.FilterStartDate.Value)
                 .WhereIf(input.FilterEndDate.HasValue, x => x.EarningDate <= input.FilterEndDate.Value)
@@ -138,12 +138,24 @@ namespace EasyLife.Financial.Earning
         {
             try
             {
-                //input.EarningDate = new DateTime(input.EarningDate.Year, input.EarningDate.Month, input.EarningDate.Day);
-                input.UserId = AbpSession.UserId.Value;
-                var earnings = await _earningsRepository.GetAsync(input.Id);
-                ObjectMapper.Map(input, earnings);
-                await _earningsRepository.UpdateAsync(earnings);
-                return MapToEntityDto(earnings);
+                if (input.Id == Guid.Empty)
+                {
+                    //Duplicate earning
+                    input.UserId = AbpSession.UserId.Value;
+                    var earnings = ObjectMapper.Map<Financial.Earning.Earnings>(input);
+                    await _earningsRepository.InsertAsync(earnings);
+                    return MapToEntityDto(earnings);
+                }
+                else
+                {
+                    //Update existing earning
+                    //input.EarningDate = new DateTime(input.EarningDate.Year, input.EarningDate.Month, input.EarningDate.Day);
+                    input.UserId = AbpSession.UserId.Value;
+                    var earnings = await _earningsRepository.GetAsync(input.Id);
+                    ObjectMapper.Map(input, earnings);
+                    await _earningsRepository.UpdateAsync(earnings);
+                    return MapToEntityDto(earnings);
+                }
             }
             catch (Exception ex)
             {

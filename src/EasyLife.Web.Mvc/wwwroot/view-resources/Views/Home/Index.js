@@ -137,8 +137,8 @@
         startDate: moment().subtract(29, 'days'),
         endDate: moment()
     }, function (start, end) {
-        $(".monthlyEarnings").html("₹ Loading...");
-        getDashboardEarningsSum(start, end);
+        $(".monthlyInvestments").html("₹ Loading...");
+        getDashboardShareMarketSum(start, end);
     });
 
     var _expensesService = abp.services.app.expenses,

@@ -2,10 +2,6 @@
 using Abp.AutoMapper;
 using EasyLife.Financial.Investment;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static EasyLife.EasyLifeEnums;
 
 namespace EasyLife.Financial.Investments.ShareMarket.Dto.ShareOrders

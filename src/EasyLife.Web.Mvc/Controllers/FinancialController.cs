@@ -130,6 +130,21 @@ namespace EasyLife.Web.Controllers
             return PartialView("_EarningsEditModal", model);
         }
 
+        [AbpMvcAuthorize(PermissionNames.Pages_Financial_Expenses)]
+        public async Task<ActionResult> EarningsDuplicateModal(Guid earningId)
+        {
+            var expenseDetail = await _earningsAppService.GetEarningsForEdit(new EntityDto<Guid>(earningId));
+            var earningCategoryList = await _earningsAppService.GetEarningCategoriesList();
+            var model = new EditEarningsViewModel
+            {
+                Earnings = expenseDetail,
+                EarningCategoryList = earningCategoryList
+            };
+            model.Earnings.Id = Guid.Empty;
+            model.Earnings.EarningDate = DateTime.Now;
+            return PartialView("_EarningsEditModal", model);
+        }
+
         #endregion Earnings
 
         #region Investment

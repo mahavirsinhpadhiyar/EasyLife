@@ -55,7 +55,7 @@ namespace EasyLife.Financial.Expenses
             query = ApplySorting(query, input);
 
             expensesList = query
-                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Payee.Contains(input.Keyword))
+                .WhereIf(!string.IsNullOrEmpty(input.Keyword), x => x.Payee.ToLower().Contains(input.Keyword.ToLower()))
                 .WhereIf(input.CategoryId != null && input.CategoryId != Guid.Empty, x => x.ExpenseCategory.Id == input.CategoryId)
                 .WhereIf(input.FilterStartDate.HasValue, x => x.ExpenseDate >= input.FilterStartDate.Value)
                 .WhereIf(input.FilterEndDate.HasValue, x => x.ExpenseDate <= input.FilterEndDate.Value)

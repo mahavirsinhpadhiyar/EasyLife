@@ -6,7 +6,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EasyLife.Financial.Expenses
 {
     [Table("Expenses")]
-    public class Expenses: FullAuditedEntity<Guid>
+    public class Expenses
+        : FullAuditedEntity<Guid>
     {
         //name of the person or place or shop to whom you are giving/spending money.
         public string Payee { get; set; }

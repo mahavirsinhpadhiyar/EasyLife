@@ -147,6 +147,9 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
                 defaultContent: '',
                 render: (data, type, row, meta) => {
                     return [
+                        `   <button type="button" class="btn btn-sm bg-secondary duplicate-earnings" data-earnings-id="${row.id}" data-toggle="modal" data-target="#EarningsEditModal" title="Duplicate">`,
+                        `       <i class="fas fa-clone" title="Duplicate"></i>`,
+                        '   </button>',
                         `   <button type="button" class="btn btn-sm bg-secondary edit-earnings" data-earnings-id="${row.id}" data-toggle="modal" data-target="#EarningsEditModal" title="Edit">`,
                         `       <i class="fas fa-pencil-alt" title="Edit"></i>`,
                         '   </button>',
@@ -246,6 +249,21 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
         e.preventDefault();
         abp.ajax({
             url: abp.appPath + 'Financial/EarningsEditModal?earningId=' + earningId,
+            type: 'POST',
+            dataType: 'html',
+            success: function (content) {
+                $('#EarningsEditModal div.modal-content').html(content);
+            },
+            error: function (e) { }
+        })
+    });
+
+    $(document).on('click', '.duplicate-earnings', function (e) {
+        var earningsId = $(this).attr("data-earnings-id");
+
+        e.preventDefault();
+        abp.ajax({
+            url: abp.appPath + 'Financial/EarningsDuplicateModal?earningId=' + earningsId,
             type: 'POST',
             dataType: 'html',
             success: function (content) {
