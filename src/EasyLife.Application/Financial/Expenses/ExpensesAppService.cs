@@ -7,6 +7,7 @@ using Abp.Extensions;
 using EasyLife.Authorization;
 using EasyLife.Authorization.Users;
 using EasyLife.Financial.Expenses.Dto;
+using EasyLife.Financial.Investments.ShareMarket.Dto.ShareMaster;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,6 +16,10 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using data = EasyLife.Financial.Expenses.Dto.data;
+using emphasis = EasyLife.Financial.Expenses.Dto.emphasis;
+using itemStyle = EasyLife.Financial.Expenses.Dto.itemStyle;
+using series = EasyLife.Financial.Expenses.Dto.series;
 
 namespace EasyLife.Financial.Expenses
 {
@@ -233,6 +238,114 @@ namespace EasyLife.Financial.Expenses
         {
             var expenseDetails = await _expensesRepository.GetAsync(input.Id);
             await _expensesRepository.HardDeleteAsync(expenseDetails);
+        }
+
+        /// <summary>
+        /// Multple expense entry in one call
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<bool> CreateListAsync(List<CreateOrEditExpensesDto> input)
+        {
+            try
+            {
+                foreach (var expense in input)
+                {
+                    expense.UserId = AbpSession.UserId.Value;
+                    var expenses = ObjectMapper.Map<Expenses>(expense);
+                    await _expensesRepository.InsertAsync(expenses);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public BarChartExpenses GetExpensesBarDetails(long? FilterUserId, DateTime? FilterStartDate, DateTime? FilterEndDate)
+        {
+            if (FilterUserId == null || FilterUserId == 0)
+                FilterUserId = AbpSession.UserId;
+
+            var expensesList = new List<Expenses>();
+
+            if (FilterStartDate == null && FilterEndDate == null) {
+                FilterStartDate = new DateTime(DateTime.Now.Year, 1, 1);
+                FilterEndDate = new DateTime(DateTime.Now.Year, 12, 31);
+            }
+
+            if (FilterStartDate != null && FilterEndDate != null)
+            {
+                expensesList = _expensesRepository.GetAll()
+                    .Include(e => e.ExpenseCategory)
+                    .Where(i => i.ExpenseDate >= FilterStartDate && i.ExpenseDate <= FilterEndDate && i.UserId == FilterUserId && !i.DoNotConsiderInTotal)
+                    .Select(n => new Expenses()
+                    {
+                        CreationTime = n.CreationTime,
+                        CreatorUserId = n.CreatorUserId,
+                        DeleterUserId = n.DeleterUserId,
+                        DeletionTime = n.DeletionTime,
+                        DoNotConsiderInTotal = n.DoNotConsiderInTotal,
+                        ExpenseCategory = n.ExpenseCategory,
+                        ExpenseDate = n.ExpenseDate,
+                        ExpenseCategoryId = n.ExpenseCategoryId,
+                        Id = n.Id,
+                        IsDeleted = n.IsDeleted,
+                        LastModificationTime = n.LastModificationTime,
+                        LastModifierUserId = n.LastModifierUserId,
+                        Money = n.Money,
+                        Note = n.Note,
+                        Payee = n.Payee,
+                        UserId = n.UserId
+                    })
+                    .OrderBy(s => s.ExpenseCategory)
+                    .ToList();
+            }
+            else
+            {
+                expensesList = _expensesRepository.GetAll()
+                    .Include(e => e.ExpenseCategory)
+                    .Where(i => i.UserId == FilterUserId)
+                    .OrderBy(s => s.ExpenseCategory)
+                    .ToList();
+            }
+
+            var resultData = expensesList
+                        .OrderBy(x => x.ExpenseCategory.CategoryName)
+                        .GroupBy(e => e.ExpenseCategory.CategoryName)
+                        .Select(x => new data()
+                        {
+                            name = x.Key,
+                            value = x.Sum(items => items.Money).ToString()
+                        }).ToList();
+
+            //var result = _expensesRepository.GetAll()
+            //        .Include(e => e.ExpenseCategory)
+            //        .GroupBy(ex => ex.ExpenseCategory.CategoryName, (key, value) => new data() { name = value, value = exp.Sum() });
+
+            BarChartExpenses barChartExpenses = new BarChartExpenses();
+
+            //Hide as share names overrite the main heading
+            //barChartShareMasterWithOrders.title.text = "Shares Count";        
+            //barChartShareMasterWithOrders.title.left = "center";
+
+            barChartExpenses.tooltip.trigger = "item";
+            barChartExpenses.legend.orient = "horizontal";
+            barChartExpenses.legend.left = "center";
+            barChartExpenses.series.Add(
+                new series()
+                {
+                    name = "Expenses Total Counts",
+                    type = "pie",
+                    radius = "50%",
+                    data = resultData,
+                    emphasis = new emphasis() { itemStyle = new itemStyle() { shadowBlur = 10, shadowOffsetX = 0, shadowColor = "rgba(0, 0, 0, 0.5)" } }
+                }
+                );
+
+            return barChartExpenses;
         }
     }
 }

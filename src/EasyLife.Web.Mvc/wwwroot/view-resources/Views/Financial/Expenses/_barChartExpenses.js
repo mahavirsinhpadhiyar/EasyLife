@@ -1,11 +1,12 @@
-﻿var abpServicesShareMaster = abp.services.app.shareMaster
+﻿var abpExpenses = abp.services.app.expenses
 var myChart;
 
-function barChartShareMarketFunction() {
-    abpServicesShareMaster.getShareMasterWithOrdersBarDetails().done(function (result) {
+function barChartExpensesFunction(filterStartDate, filterEndDate) {
+    $(".expensesCollapseTwo").text("Expenses (Loading...)");
+    abpExpenses.getExpensesBarDetails(0, filterStartDate, filterEndDate).done(function (result) {
         var option = result;
 
-        var dom = document.getElementById('barChartShareMaster');
+        var dom = document.getElementById('barChartExpenses');
         myChart = echarts.init(dom, null, {
             renderer: 'canvas',
             useDirtyRect: false
@@ -18,12 +19,12 @@ function barChartShareMarketFunction() {
 
         window.addEventListener('resize', myChart.resize);
     }).always(function () {
-        $(".shareMarketCollapseOne").text("Share Master");
+        $(".expensesCollapseTwo").text("Expenses");
         abp.ui.clearBusy();
     })
 }
 
-barChartShareMarketFunction();
+barChartExpensesFunction();
 
 $(window).on('resize', function () {
     if (myChart != null && myChart != undefined) {

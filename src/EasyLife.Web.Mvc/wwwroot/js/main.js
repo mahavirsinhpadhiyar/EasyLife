@@ -2,6 +2,10 @@
     return "₹ " + value;
 }
 
+function format_number(number, num_decimals, include_comma) {
+    return number.toLocaleString('en-IN', { useGrouping: include_comma, minimumFractionDigits: num_decimals, maximumFractionDigits: num_decimals });
+}
+
 (function ($) {
     //Notification handler
     abp.event.on('abp.notifications.received', function (userNotification) {

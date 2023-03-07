@@ -186,7 +186,8 @@ namespace EasyLife.Financial.Investments.ShareMarket.Services.Implementation
 
             foreach (var item in investmentShareMaster)
             {
-                var totalBuy = item.EL_Financial_Investment_Share_Orders.Where(o => o.Share_Transaction_Type != EasyLifeEnums.Share_Transaction_Type.Sell).Sum(o => o.Share_Quantity);
+                var totalBuy = item.EL_Financial_Investment_Share_Orders.Where(o => o.Share_Transaction_Type != EasyLifeEnums.Share_Transaction_Type.Sell).Sum(o 
+                    => o.Share_Quantity);
                 var totalSell = item.EL_Financial_Investment_Share_Orders.Where(o => o.Share_Transaction_Type == EasyLifeEnums.Share_Transaction_Type.Sell).Sum(o => o.Share_Quantity);
                 if (totalBuy != totalSell)
                 {

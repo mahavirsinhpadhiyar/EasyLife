@@ -1,4 +1,5 @@
 ﻿var blankGUID = '00000000-0000-0000-0000-000000000000';
+var total = 0;
 
 $(".dateTimePicker-earning-filter-startDate").datetimepicker({
     //startDate: '+2018/01/01',
@@ -136,7 +137,8 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
                 className: "text-right",
                 data: 'money',
                 render: (data, type, row, meta) => {
-                    return '₹ ' + row.money;
+                    total = total + row.money;
+                    return format_number(row.money, 3, true);
                 }
             },
             {
@@ -160,6 +162,10 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
                 }
             }
         ],
+        drawCallback: function () {
+            $(".earningMoneyTotal").text(format_number(total, 2, true));
+            total = 0;
+        },
         dom: [
             "<'row'<'col-md-12'f>>",
             "<'row'<'col-md-12't>>",
@@ -171,6 +177,10 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
             ">"
         ].join('')
     });
+
+    //_$EearningsTable.on('page.dt', function () { alert("page"); total = 0; })
+
+    //_$EearningsTable.on('draw', function () { alert("draw"); total = 0; })
 
     _$form.find('.save-button').on('click', (e) => {
         e.preventDefault();
@@ -188,6 +198,7 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
                 _$form[0].reset();
                 abp.notify.success(l('SavedSuccessfully'));
                 _$EearningsTable.ajax.reload();
+                getDashboardTotalEarning();
                 //getCalendarEvents();
             })
             .always(function () {
@@ -202,6 +213,14 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
         deleteEarnings(earningsId, earningsName);
     });
 
+    function getDashboardTotalEarning() {
+        _earningService.dashboardTotalEarnings().done(function (result) {
+            $(".divEarningsNotesText").text(result);
+        }).always(function () {
+            abp.ui.clearBusy(_$table);
+        });
+    }
+
     function deleteEarnings(earningsId, earningsName) {
         abp.message.confirm(
             abp.utils.formatString("Are You Sure Want To Delete",
@@ -214,6 +233,7 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
                     }).done(() => {
                         abp.notify.success(l('SuccessfullyDeleted'));
                         _$EearningsTable.ajax.reload();
+                        getDashboardTotalEarning();
                         //getCalendarEvents();
                     });
                 }
@@ -240,6 +260,7 @@ $(".dateTimePicker-earning-filter-endDate").datetimepicker({
 
     abp.event.on('earnings.edited', (data) => {
         _$EearningsTable.ajax.reload();
+        getDashboardTotalEarning();
         //getDashboardValues();
     });
 

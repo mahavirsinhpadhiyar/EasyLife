@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace EasyLife.Financial.Investments.ShareMarket.Dto.ShareMaster
+namespace EasyLife.Financial.Expenses.Dto
 {
-    public class BarChartShareMasterWithOrders
+    public class BarChartExpenses
     {
-        public BarChartShareMasterWithOrders()
+        public BarChartExpenses()
         {
             title = new title();
             tooltip = new tooltip() { formatter = "{a} <br/>{b} : {c} ({d}%)" };
