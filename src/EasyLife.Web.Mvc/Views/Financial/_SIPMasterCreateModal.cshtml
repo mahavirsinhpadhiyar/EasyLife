@@ -1,0 +1,35 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Investment.SIPMasterListViewModel
+@{ Layout = null; }
+
+<style>
+    .section-title {
+        display: block;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        color: #003e80
+    }
+</style>
+
+<div class="modal fade" id="SIPMasterCreateModal" tabindex="-1" role="dialog" aria-labelledby="SIPMasterCreateModalLabel" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Add SIP"))
+            <form name="expensesForm" role="form" class="form-horizontal">
+                <div class="modal-body" style="height:500px; overflow:auto;">
+                    <div class="row col-md-12">
+                        <div class="col-md-4 form-group required">
+                            <label for="SIP_Name">SIP Name</label>
+                            <input id="SIP_Name" type="text" name="SIP_Name" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 form-group required">
+                            <label for="SIP_Folio_No">Folio Number</label>
+                            <input id="SIP_Folio_No" type="text" name="SIP_Folio_No" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+            </form>
+        </div>
+    </div>
+</div>

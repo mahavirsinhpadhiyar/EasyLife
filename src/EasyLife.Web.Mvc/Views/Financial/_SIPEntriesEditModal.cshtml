@@ -1,0 +1,63 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Investment.EditSIPEntriesViewModel
+@{
+    Layout = null;
+}
+
+<style>
+    .section-title {
+        display: block;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        color: #003e80
+    }
+</style>
+
+@if (Model.SIPEntriesDto.Id == Guid.Empty)
+{
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Duplicate Entry"))
+    ;
+}
+else
+{
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Entry"))
+    ;
+}
+<form name="sipEntriesForm" role="form" class="form-horizontal">
+    <input type="hidden" id="ShareOrderId" name="Id" value="@Model.SIPEntriesDto.Id" />
+    <input type="hidden" id="EL_Financial_Investment_SIP_Master_Id" name="EL_Financial_Investment_SIP_Master_Id" value="@Model.SIPEntriesDto.EL_Financial_Investment_SIP_Master_Id" />
+    <div class="modal-body" style="height:500px; overflow:auto;">
+        <div class="row col-md-12">
+            <div class="col-md-4 form-group required">
+                <label for="SIP_Order_Date">Investment Date</label>
+                <input id="SIP_Order_Date" type="text" name="SIP_Order_Date" class="form-control datetimepicker-input" value="@Model.SIPEntriesDto.SIP_Order_Date.ToString("yyyy/MM/dd HH:mm")" required>
+            </div>
+            <div class="col-md-4 form-group required">
+                <label for="SIP_Average_Price">Average Price</label>
+                <input id="SIP_Average_Price" type="text" name="SIP_Average_Price" class="form-control SIP_Average_Price_Edit" value="@Model.SIPEntriesDto.SIP_Average_Price" required>
+            </div>
+            <div class="col-md-4 form-group required">
+                <label for="SIP_Amount">Amount</label>
+                <input id="SIP_Amount" type="text" name="SIP_Amount" class="form-control SIP_Amount_Edit" value="@Model.SIPEntriesDto.SIP_Amount" required>
+            </div>
+        </div>
+
+        <div class="row col-md-12">
+            <div class="col-md-4 form-group required">
+                <label for="SIP_Units">Units</label>
+                <input id="SIP_Units" type="text" name="SIP_Units" class="form-control SIP_Units_Edit" value="@Model.SIPEntriesDto.SIP_Units" required>
+            </div>
+            <div class="col-md-4 form-group required">
+                <label for="SIP_Order_Id">Order Id</label>
+                <input id="SIP_Order_Id" type="text" name="SIP_Order_Id" value="@Model.SIPEntriesDto.SIP_Order_Id" class="form-control" required>
+            </div>
+            <div class="col-md-4 form-group required">
+                <label for="Share_Order_Type">SIP Type</label>
+                @Html.DropDownListFor(m => m.SIPEntriesDto.SIPType, Html.GetEnumSelectList<EasyLife.EasyLifeEnums.SIPType>(), new { @class = "form-control SIPType_Edit", @required = "required", @name = "SIPType" })
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Financial/Investment/_SIPEntriesEditModel.js" asp-append-version="true"></script>

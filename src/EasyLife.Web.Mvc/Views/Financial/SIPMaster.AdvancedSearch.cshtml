@@ -1,0 +1,20 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Investment.SIPMasterListViewModel
+<div class="abp-advanced-search">
+    <form id="SIPMasterSearchForm" class="form-horizontal">
+        <div class="input-group">
+            <input type="text" name="Keyword" class="form-control txt-search" placeholder="Search SIP Name" />
+            @if (User.IsInRole(EasyLife.Authorization.Roles.StaticRoleNames.Host.Admin))
+            {
+                Model.UsersList.Insert(0, new SelectListItem() { Text = "-- All Users --", Value = "" });
+        @Html.DropDownList("FilterUserId", Model.UsersList, new { @class = "form-control", @required = "required", @name = "FilterUserId" })}
+            &nbsp;&nbsp;
+            <input type="button" class="btn btn-primary globalFilterClear" value="Clear" />
+            &nbsp;
+            <a href="javascript:;" class="btn bg-blue float-sm-right btn-search" id="searchbutton">
+                <i class="fa fa-search"></i>
+                Search
+            </a>
+        </div>
+    </form>
+</div>

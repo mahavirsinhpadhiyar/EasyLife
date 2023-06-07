@@ -1,0 +1,53 @@
+﻿@using EasyLife.Web.Models.Upload
+
+@{
+    ViewBag.Title = "Folder Explorer";
+}
+@*@{Uri uri = Request.Url;}*@
+
+@*Show the current directory name using page URL. *@
+@*<h2>@Server.UrlDecode(uri.Segments.Last())</h2>*@
+
+@*If we were in root folder then don't show the up one level image. *@
+@*@if (uri.AbsolutePath.ToLower() != "/explorer/")*@
+@*{*@
+@*Making a URL to going up one level. *@
+@*<a title="Parent"
+       href="@uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length)">
+        <img src="http://www.codeproject.com/Content/up.png"
+             alt="Up" style="width: 20px; height: 20px; border: none" />
+    </a>*@
+@*}*@
+<ul>
+    @*Listing the directories *@
+    @{
+        var dirPath = string.Empty;
+    }
+    @foreach (DirModel dir in Model.dirModelList)
+    {
+        <li>
+            <img src="http://www.codeproject.com/Content/folder.png"
+                 alt="Folder Logo" align="top" style="width: 20px;
+                height: 20px; border: none" />
+            @{ 
+                dirPath = "/Upload/Download?path=" + dir.DirPath + " / ";
+            }
+            <a href="/Upload/FolderList?path=@dir.DirPath" title="@dir.DirName">@dir.DirName</a>
+            . . . . . . @dir.DirAccessed
+        </li>
+    }
+    @*Listing the files *@
+    @foreach (FileModel file in Model.fileModelList)
+    {
+        <li>
+            @{ 
+                string fullPathWithFileName = dirPath + file.FileName;
+            }
+            <a href="@fullPathWithFileName"
+               title="@file.FileName" target="_blank">
+                @file.FileName
+            </a>. . . . . . @file.FileSizeText
+            . . . . . . @file.FileAccessed
+        </li>
+    }
+</ul>

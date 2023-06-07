@@ -1746,6 +1746,113 @@ namespace EasyLife.Migrations
                     b.ToTable("Expenses");
                 });
 
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_SIP_Entry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EL_Financial_Investment_SIP_Master_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("SIPType")
+                        .HasColumnType("int");
+
+                    b.Property<double>("SIP_Amount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SIP_Average_Price")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("SIP_Order_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SIP_Order_Id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("SIP_Units")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EL_Financial_Investment_SIP_Master_Id");
+
+                    b.ToTable("EL_Financial_Investment_SIP_Entry");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_SIP_Master", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AutoInstallmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AutopayID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("SIPID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SIP_Folio_No")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SIP_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EL_Financial_Investment_SIP_Master");
+                });
+
             modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_Share_Master", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2215,7 +2322,7 @@ namespace EasyLife.Migrations
             modelBuilder.Entity("EasyLife.Financial.Expenses.Expenses", b =>
                 {
                     b.HasOne("EasyLife.Financial.Expenses.ExpenseCategory", "ExpenseCategory")
-                        .WithMany()
+                        .WithMany("EL_Financial_Expenses_List")
                         .HasForeignKey("ExpenseCategoryId");
 
                     b.HasOne("EasyLife.Authorization.Users.User", "User")
@@ -2225,6 +2332,28 @@ namespace EasyLife.Migrations
                         .IsRequired();
 
                     b.Navigation("ExpenseCategory");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_SIP_Entry", b =>
+                {
+                    b.HasOne("EasyLife.Financial.Investment.EL_Financial_Investment_SIP_Master", "EL_Financial_Investment_SIP_Master")
+                        .WithMany("EL_Financial_Investment_SIP_Entries")
+                        .HasForeignKey("EL_Financial_Investment_SIP_Master_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EL_Financial_Investment_SIP_Master");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_SIP_Master", b =>
+                {
+                    b.HasOne("EasyLife.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -2358,6 +2487,16 @@ namespace EasyLife.Migrations
                     b.Navigation("Settings");
 
                     b.Navigation("Tokens");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Expenses.ExpenseCategory", b =>
+                {
+                    b.Navigation("EL_Financial_Expenses_List");
+                });
+
+            modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_SIP_Master", b =>
+                {
+                    b.Navigation("EL_Financial_Investment_SIP_Entries");
                 });
 
             modelBuilder.Entity("EasyLife.Financial.Investment.EL_Financial_Investment_Share_Master", b =>

@@ -1,0 +1,19 @@
+﻿@using EasyLife.Web.Models.Common.Modals
+@model EasyLife.Web.Models.Financial.Investment.SIPEntriesListViewModel
+<div class="abp-advanced-search">
+    <form id="SIPEntriesSearchForm" class="form-horizontal">
+        <div class="input-group">
+            &nbsp;&nbsp;
+            <input type="text" id="dateTimePicker-sip-entry-filter-startDate" name="dateTimePicker-sip-entry-filter-startDate" class="dateTimePicker-sip-entry-filter-startDate form-control" value="@Model.FilterStartDate" placeholder="Start Date" />
+            &nbsp;&nbsp;
+            <input type="text" id="dateTimePicker-sip-order-filter-endDate" name="dateTimePicker-sip-entry-filter-endDate" class="dateTimePicker-sip-entry-filter-endDate form-control" value="@Model.FilterEndDate" placeholder="End Date" />
+            &nbsp;
+            <input type="button" class="btn btn-primary globalFilterClear" value="Clear" />
+            &nbsp;
+            <a href="javascript:;" class="btn bg-blue float-sm-right btn-search" id="searchbutton">
+                <i class="fa fa-search"></i>
+                Search
+            </a>
+        </div>
+    </form>
+</div>

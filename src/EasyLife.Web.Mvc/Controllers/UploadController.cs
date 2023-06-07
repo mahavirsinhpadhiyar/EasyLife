@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 
 namespace EasyLife.Web.Controllers
@@ -46,6 +48,78 @@ namespace EasyLife.Web.Controllers
             return View(dataList);
         }
 
+        public ActionResult FolderList(string path)
+        {
+            string realPath;
+            if (String.IsNullOrEmpty(path))
+                realPath = Path.Combine(this.Environment.ContentRootPath, "Uploads");
+            else
+                realPath = path;
+            var directories = Directory.GetDirectories(realPath);
+            // or realPath = "FullPath of the folder on server" 
+
+            if (System.IO.File.Exists(realPath))
+            {
+                //http://stackoverflow.com/questions/1176022/unknown-file-type-mime
+                return base.File(realPath, "application/octet-stream");
+            }
+            else if (System.IO.Directory.Exists(realPath))
+            {
+                //Uri url = Request.Url;
+                ////Every path needs to end with slash
+                //if (url.ToString().Last() != '/')
+                //{
+                //    Response.Redirect("/Uploads/" + path + "/");
+                //}
+
+                List<FileModel> fileListModel = new List<FileModel>();
+
+                List<DirModel> dirListModel = new List<DirModel>();
+
+                IEnumerable<string> dirList = Directory.EnumerateDirectories(realPath);
+                foreach (string dir in dirList)
+                {
+                    DirectoryInfo d = new DirectoryInfo(dir);
+
+                    DirModel dirModel = new DirModel();
+
+                    dirModel.DirPath =  dir;
+                    dirModel.DirName = Path.GetFileName(dir);
+                    dirModel.DirAccessed = d.LastAccessTime;
+
+                    dirListModel.Add(dirModel);
+                }
+
+                IEnumerable<string> fileList = Directory.EnumerateFiles(realPath);
+                foreach (string file in fileList)
+                {
+                    FileInfo f = new FileInfo(file);
+
+                    FileModel fileModel = new FileModel();
+
+                    if (f.Extension.ToLower() != "php" && f.Extension.ToLower() != "aspx"
+                        && f.Extension.ToLower() != "asp")
+                    {
+                        fileModel.FileName = Path.GetFileName(file);
+                        fileModel.FileAccessed = f.LastAccessTime;
+                        fileModel.FileSizeText = (f.Length < 1024) ?
+                                 f.Length.ToString() + " B" : f.Length / 1024 + " KB";
+
+                        fileListModel.Add(fileModel);
+                    }
+                }
+
+                ExplorerModel explorerModel = new ExplorerModel(dirListModel, fileListModel);
+
+                return View(explorerModel);
+            }
+            else
+            {
+                return View(new ExplorerModel(new List<DirModel>(), new List<FileModel>()));
+                //return Content(path + " is not a valid file or directory.");
+            }
+        }
+
         [HttpPost]
         public IActionResult Index(List<IFormFile> postedFiles)
         {
@@ -73,13 +147,13 @@ namespace EasyLife.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Download(string FileName)
+        public IActionResult Download(string path)
         {
             //return File(this.Environment.ContentRootFileProvider.GetFileInfo(FileName).CreateReadStream(), , enableRangeProcessing: true);
             //https://stackoverflow.com/questions/45727856/how-to-download-a-file-in-asp-net-core use for mime types and file download useful.
-            string path = Path.Combine(this.Environment.ContentRootPath, "Uploads/" + FileName);
+            //string path = Path.Combine(this.Environment.ContentRootPath, "Uploads/" + FileName);
             byte[] fileBytes = System.IO.File.ReadAllBytes(path);
-            return File(fileBytes, "application/force-download",FileName);
+            return File(fileBytes, "application/force-download", Path.GetFileName(path));
         }
 
         public IActionResult MutualFund()

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
+    <text name="SIPMaster" value="SIP"></text>
     <text name="ShareMaster" value="Share Market Master"></text>
     <text name="Pages_Financial_Investment_Crypto" value="Investment Crypto"></text>
     <text name="Pages_Financial_Investment_SIP" value="Investment SIP"></text>

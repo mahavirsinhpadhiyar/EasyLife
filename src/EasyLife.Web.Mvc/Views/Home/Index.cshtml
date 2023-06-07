@@ -8,7 +8,7 @@
     {
     <environment names="Development">
         <script src="~/libs/chartjs/dist/Chart.js" asp-append-version="true"></script>
-        <script src="https://fastly.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+        <script src="~/libs/chartjs/echarts.min.js"></script>
         <script src="~/view-resources/Views/Financial/Investment/_barChartShareMarket.js" asp-append-version="true"></script>
         <script src="~/view-resources/Views/Financial/Expenses/_barChartExpenses.js"></script>
         <script src="~/view-resources/Views/Financial/Earnings/_barChartEarnings.js"></script>
@@ -19,7 +19,7 @@
     </environment>
 
     <environment names="Staging,Production">
-        <script src="https://fastly.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+        <script src="~/libs/chartjs/echarts.min.js"></script>
         <script src="~/view-resources/Views/Financial/Investment/_barChartShareMarket.min.js" asp-append-version="true"></script>
         <script src="~/view-resources/Views/Financial/Expenses/_barChartExpenses.min.js"></script>
         <script src="~/view-resources/Views/Financial/Earnings/_barChartEarnings.min.js"></script>
@@ -130,7 +130,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card card-danger">
+                            @*<div class="card card-danger">
                                 <div class="card-header">
                                     <h4 class="card-title w-100">
                                         <a class="d-block w-100 expensesCollapseFour" data-toggle="collapse" href="#collapseFour">
@@ -142,7 +142,7 @@
                                     <div class="card-body" id="expensesCBarChart" style="width: 550px;height:700px;">
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                     <!-- /.card-body -->

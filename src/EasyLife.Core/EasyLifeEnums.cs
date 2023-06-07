@@ -42,6 +42,21 @@ namespace EasyLife
             [Description("Bonus")]
             Bonus
         }
-        #endregion Financial
+        public enum EBarReportType
+        {
+            Monthly,
+            Yearly
         }
+
+        public enum SIPType
+        {
+            [Description("INSTALMENT")]
+            Instalment,
+            [Description("ONE-TIME")]
+            OneTime,
+            [Description("REDEEM")]
+            Redeem
+        }
+        #endregion Financial
+    }
 }
