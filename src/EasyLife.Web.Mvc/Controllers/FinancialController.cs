@@ -241,9 +241,9 @@ namespace EasyLife.Web.Controllers
             if (User.IsInRole(EasyLife.Authorization.Roles.StaticRoleNames.Host.Admin))
             {
                 var usersList = Task.Run(async () => await _userAppService.GetUsersList()).Result;
-                return View("ShareMaster", new ShareMasterListViewModel()
+                return View("SIPMaster", new SIPMasterListViewModel()
                 {
-                    ShareMasterDto = new CreateOrEditShareMasterDto(),
+                    SIPMasterDto = new CreateOrEditSIPMasterDto(),
                     UsersList = usersList,
                     TotalInvestments = totalInvestments
                 });
