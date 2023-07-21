@@ -1,0 +1,7 @@
+# deploy_settings.yml
+
+deployment:
+  server: your_ftp_server_address
+  username: your_ftp_username
+  password: your_ftp_password
+  remote_directory: /path/to/remote/directory
