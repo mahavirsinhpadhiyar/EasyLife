@@ -23,6 +23,12 @@
                             <input id="Share_Name" type="text" name="Share_Name" class="form-control" required>
                         </div>
                     </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-12 form-group">
+                            <label for="Notes">Notes</label>
+                            <textarea id="Notes" name="Notes" class="form-control" style="height:20em"></textarea>
+                        </div>
+                    </div>
                 </div>
                 @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
             </form>

@@ -21,10 +21,10 @@ namespace EasyLife.Financial.Investments.SIP.Dto.SIPMaster
         //To display the current average price of the taken mutual fund
         public string CurrentAveragePrice { get; set; }
         //To display the average price of the user's taken stock wise.
-        public string AverageNAV { get; set; }
+        public double AverageNAV { get; set; }
         public string TotalEarnedOrLossDisplay { get; set; }
         public string TotalEarnedOrLossPercentageDisplay { get; set; }
-        public string TotalPurchasedUnits { get; set; }
-        public string TotalInvestedAmount { get; set; }
+        public double TotalPurchasedUnits { get; set; }
+        public double TotalInvestedAmount { get; set; }
     }
 }

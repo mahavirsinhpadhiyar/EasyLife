@@ -196,5 +196,17 @@
     "inputFiles": [
       "wwwroot/view-resources/Views/Financial/Earnings/_barChartEarnings.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Investment/SIPMaster.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Investment/SIPMaster.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Investment/SIPEntries.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Investment/SIPEntries.js"
+    ]
   }
 ]

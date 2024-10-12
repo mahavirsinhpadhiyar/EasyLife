@@ -147,11 +147,11 @@ namespace EasyLife.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Download(string path)
+        public IActionResult Download(string FileName)
         {
             //return File(this.Environment.ContentRootFileProvider.GetFileInfo(FileName).CreateReadStream(), , enableRangeProcessing: true);
             //https://stackoverflow.com/questions/45727856/how-to-download-a-file-in-asp-net-core use for mime types and file download useful.
-            //string path = Path.Combine(this.Environment.ContentRootPath, "Uploads/" + FileName);
+            string path = Path.Combine(this.Environment.ContentRootPath, "Uploads/" + FileName);
             byte[] fileBytes = System.IO.File.ReadAllBytes(path);
             return File(fileBytes, "application/force-download", Path.GetFileName(path));
         }
@@ -169,6 +169,11 @@ namespace EasyLife.Web.Controllers
             }
 
             return Json(response.Content.ReadAsStringAsync().Result);
+        }
+
+        public IActionResult FullCalendar()
+        {
+            return View();
         }
     }
 }

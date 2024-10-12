@@ -26,11 +26,11 @@ namespace EasyLife.Web.Controllers
     {
         private readonly IExpensesAppService _expensesAppService;
         private readonly IEarningAppService _earningsAppService;
-        private readonly IShareMasterAppService _shareMasterAppService;
-        private readonly IShareOrdersAppService _shareOrdersAppService;
         private readonly ISIPMasterAppService _sipMasterAppService;
         private readonly ISIPEntriesAppService _sipEntriesAppService;
         private readonly IUserAppService _userAppService;
+        private readonly IShareMasterAppService _shareMasterAppService;
+        private readonly IShareOrdersAppService _shareOrdersAppService;
         public FinancialController(IExpensesAppService expensesAppService, IEarningAppService earningsAppService, IUserAppService userAppService, IShareMasterAppService shareMasterAppService, IShareOrdersAppService shareOrdersAppService, ISIPMasterAppService sipMasterAppService, ISIPEntriesAppService sipEntriesAppService)
         {
             _expensesAppService = expensesAppService;
@@ -197,7 +197,7 @@ namespace EasyLife.Web.Controllers
         public async Task<IActionResult> ShareOrders(Guid shareMasterId)
         {
             var shareMasterDetail = await _shareMasterAppService.GetShareMasterForEdit(new EntityDto<Guid>(shareMasterId));
-            return View("SIPEntries", new ShareOrdersListViewModel()
+            return View("ShareOrders", new ShareOrdersListViewModel()
             {
                 ShareOrdersDto = new CreateOrEditShareOrdersDto() { EL_Financial_Investment_Share_Master_Id = shareMasterId },
                 ShareMasterId = shareMasterId,

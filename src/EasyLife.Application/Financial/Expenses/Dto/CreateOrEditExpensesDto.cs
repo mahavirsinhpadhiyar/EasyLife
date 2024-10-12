@@ -19,7 +19,7 @@ namespace EasyLife.Financial.Expenses.Dto
         {
             get
             {
-                return ExpenseDate.ToString("dd/MM/yyyy HH:mm");
+                return ExpenseDate.ToString_dd_MM_yyyy_HH_MM();
             }
         }
     }
