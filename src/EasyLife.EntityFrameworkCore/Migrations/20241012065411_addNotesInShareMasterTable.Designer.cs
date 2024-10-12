@@ -4,14 +4,16 @@ using EasyLife.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EasyLife.Migrations
 {
     [DbContext(typeof(EasyLifeDbContext))]
-    partial class EasyLifeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241012065411_addNotesInShareMasterTable")]
+    partial class addNotesInShareMasterTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
