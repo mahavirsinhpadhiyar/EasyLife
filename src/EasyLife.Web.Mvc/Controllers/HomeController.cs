@@ -11,5 +11,15 @@ namespace EasyLife.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult InLawFamilyTree()
+        {
+            return View();
+        }
+
+        public ActionResult FamilyTree()
+        {
+            return View();
+        }
     }
 }

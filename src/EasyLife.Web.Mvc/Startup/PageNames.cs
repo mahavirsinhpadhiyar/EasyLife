@@ -13,6 +13,7 @@
         public const string Earnings = "Earnings";
         public const string Investments = "Investments";
         public const string Financial_ShareMaster = "Share Master";
+        public const string Financial_SIPMaster = "SIP Master";
         #endregion Financial
 
         #region Personal

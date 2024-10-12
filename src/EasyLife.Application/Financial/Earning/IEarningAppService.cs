@@ -34,5 +34,13 @@ namespace EasyLife.Financial.Earning
         /// </summary>
         /// <returns></returns>
         Task<string> DashboardTotalEarnings(DateTime? monthStartDate, DateTime? monthEndDate);
+        /// <summary>
+        /// Return chart report details of expenses
+        /// </summary>
+        /// <param name="FilterUserId">Selected User Id</param>
+        /// <param name="FilterStartDate">Start Date</param>
+        /// <param name="FilterEndDate">End Date</param>
+        /// <returns></returns>
+        BarChartEarnings GetEarningsBarDetails(long? FilterUserId, DateTime? FilterStartDate, DateTime? FilterEndDate);
     }
 }

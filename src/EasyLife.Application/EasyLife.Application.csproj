@@ -17,6 +17,9 @@
     <None Remove="Financial\Earnings\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Financial\Expenses\ExpensesAppService.cs~RF14e06894.TMP" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EasyLife.Core\EasyLife.Core.csproj" />
     <ProjectReference Include="..\EasyLife.EntityFrameworkCore\EasyLife.EntityFrameworkCore.csproj" />
   </ItemGroup>

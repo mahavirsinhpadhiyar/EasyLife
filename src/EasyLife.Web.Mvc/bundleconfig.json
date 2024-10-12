@@ -184,5 +184,29 @@
     "inputFiles": [
       "wwwroot/view-resources/Views/Financial/Investment/_barChartShareMarket.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Expenses/_barChartExpenses.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Expenses/_barChartExpenses.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Earnings/_barChartEarnings.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Earnings/_barChartEarnings.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Investment/SIPMaster.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Investment/SIPMaster.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Financial/Investment/SIPEntries.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Financial/Investment/SIPEntries.js"
+    ]
   }
 ]

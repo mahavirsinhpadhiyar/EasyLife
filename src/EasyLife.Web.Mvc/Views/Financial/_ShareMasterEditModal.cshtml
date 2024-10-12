@@ -1,6 +1,8 @@
 ﻿@using EasyLife.Web.Models.Common.Modals
 @model EasyLife.Web.Models.Financial.Investment.EditShareMasterViewModel
-@{ Layout = null; }
+@{
+    Layout = null;
+}
 
 <style>
     .section-title {
@@ -19,6 +21,12 @@
             <div class="col-md-4 form-group required">
                 <label for="Share_Name">Share Name</label>
                 <input id="Edit_Share_Name" type="text" name="Share_Name" class="form-control" value="@Model.ShareMasterDto.Share_Name" required>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="col-md-12 form-group required">
+                <label for="Notes">Notes</label>
+                <textarea id="Edit_Notes" name="Notes" class="form-control" style="height:20em">@Model.ShareMasterDto.Note</textarea>
             </div>
         </div>
     </div>

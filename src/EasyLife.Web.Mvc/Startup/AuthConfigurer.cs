@@ -38,7 +38,8 @@ namespace EasyLife.Web.Startup
                             ClockSkew = TimeSpan.Zero
                         };
                     });
-                
+                services.AddTransient<System.Net.Mail.SmtpClient>();
+                services.AddTransient<EasyLife.Mail.MailService>();
             }
         }
     }

@@ -13,6 +13,7 @@ namespace EasyLife.Financial.Investment
     public class EL_Financial_Investment_Share_Master : FullAuditedEntity<Guid>
     {
         public string Share_Name { get; set; }
+        public string Notes { get; set; }
         [ForeignKey("User")]
         public long UserId { get; set; }
         public User User { get; set; }

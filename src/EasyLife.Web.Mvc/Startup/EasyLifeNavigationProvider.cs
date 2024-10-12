@@ -87,8 +87,13 @@ namespace EasyLife.Web.Startup
                                 url: "Financial/ShareMaster",
                                 icon: "fas fa-rupee-sign",
                                 permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Financial_Investment_ShareMarket)
-                            )
-                    )
+                            )).AddItem(new MenuItemDefinition(
+                                PageNames.Investments,
+                                L("SIPMaster"),
+                                url: "Financial/SIPMaster",
+                                icon: "fas fa-rupee-sign",
+                                permissionDependency: new SimplePermissionDependency(PermissionNames.Pages_Financial_Investment_SIP)
+                            ))
                             )
                 ).AddItem(       //Personal Menu
                     new MenuItemDefinition(

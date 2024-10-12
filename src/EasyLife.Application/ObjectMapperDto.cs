@@ -6,6 +6,8 @@ using EasyLife.Financial.Expenses.Dto;
 using EasyLife.Financial.Investment;
 using EasyLife.Financial.Investments.ShareMarket.Dto.ShareOrders;
 using EasyLife.Financial.Investments.ShareMarket.ShareMaster.Dto;
+using EasyLife.Financial.Investments.SIP.Dto.SIPEntry;
+using EasyLife.Financial.Investments.SIP.Dto.SIPMaster;
 using EasyLife.Personal.EncryptedImportantThings;
 using EasyLife.Personal.EncryptedImportantThings.Dto;
 
@@ -20,6 +22,8 @@ namespace EasyLife
             CreateMap<CreateOrEditEncryptedImportantInformationDto, EncryptedImportantInformation>();
             CreateMap<CreateOrEditShareMasterDto, EL_Financial_Investment_Share_Master>();
             CreateMap<CreateOrEditShareOrdersDto, EL_Financial_Investment_Share_Orders>();
+            CreateMap<CreateOrEditSIPMasterDto, EL_Financial_Investment_SIP_Master>();
+            CreateMap<CreateOrEditSIPEntriesDto, EL_Financial_Investment_SIP_Entry>();
         }
     }
 }

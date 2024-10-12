@@ -21,6 +21,8 @@ namespace EasyLife.EntityFrameworkCore
         public virtual DbSet<Earnings> Earnings { get; set; }
         public virtual DbSet<EL_Financial_Investment_Share_Master> EL_Financial_Investment_Share_Master { get; set; }
         public virtual DbSet<EL_Financial_Investment_Share_Orders> EL_Financial_Investment_Share_Orders { get; set; }
+        public virtual DbSet<EL_Financial_Investment_SIP_Master> EL_Financial_Investment_SIP_Master { get; set; }
+        public virtual DbSet<EL_Financial_Investment_SIP_Entry> EL_Financial_Investment_SIP_Entry { get; set; }
         #endregion Financial
 
         #region Personal

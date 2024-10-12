@@ -1,0 +1,59 @@
+﻿@using EasyLife.Web.Startup
+@using EasyLife.Web.Models.Upload
+@model List<UploadedDocumentList>
+@{ ViewBag.Title = L("EasyLife"); }
+
+<style>
+    .img-fluid {
+        width: 50%;
+        height: 50%;
+    }
+</style>
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 input-group">
+                <h1>Documents</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="callout callout-blue divUploadedDocuments">
+                    <form method="post" enctype="multipart/form-data" asp-controller="Upload" asp-action="Index">
+                        <span>Select File:</span>
+                        <input type="file" name="postedFiles" multiple />
+                        <input type="submit" value="Upload" />
+                        <br />
+                        <span style="color:green">@Html.Raw(ViewBag.Message)</span>
+                    </form>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        Uploaded Documents
+                    </div>
+                    <div class="card-body" style="max-height: 500px; overflow-y: scroll;">
+                        <div>
+                            <div class="row">
+                                @foreach (var doc in Model)
+                                {
+                                    //Show file type wise file not found image and also show file type wise sorted and show it in the accordian in future.
+                                    var photoPath = "../Uploads/" + doc.FileName;
+                                <div class="col-sm-2">
+                                    <img src="@photoPath" class="img-fluid mb-2" alt="@doc.FileName" asp-append-version="true" />
+                                    <a href="/Upload/Download?FileName=@doc.FileName" target="_blank"><i class="fa-solid fa-file-download"></i></a>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

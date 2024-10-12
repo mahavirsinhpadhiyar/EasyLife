@@ -1,4 +1,5 @@
 ﻿var blankGUID = '00000000-0000-0000-0000-000000000000';
+var total = 0;
 
 //$('.dateTimePicker-expense-filter-startDate').datepicker({
 //    format: 'L',
@@ -164,7 +165,8 @@ $(".dateTimePicker-expense-filter-endDate").datetimepicker({
                 data: 'money',
                 sortable: true,
                 render: (data, type, row, meta) => {
-                    return '₹ ' + row.money;
+                    total = total + row.money;
+                    return format_number(row.money, 2, true);
                 }
             },
             {
@@ -188,6 +190,10 @@ $(".dateTimePicker-expense-filter-endDate").datetimepicker({
                 }
             }
         ],
+        drawCallback: function () {
+            $(".expenseMoneyTotal").text(format_number(total, 2, true));
+            total = 0;
+        },
         dom: [
             "<'row'<'col-md-12'f>>",
             "<'row'<'col-md-12't>>",
@@ -199,6 +205,8 @@ $(".dateTimePicker-expense-filter-endDate").datetimepicker({
             ">"
         ].join('')
     });
+
+    //_$ExpensesTable.on('page.dt', function () { total = 0; });
 
     _$form.find('.save-button').on('click', (e) => {
         e.preventDefault();
@@ -222,6 +230,7 @@ $(".dateTimePicker-expense-filter-endDate").datetimepicker({
                 _$form[0].reset();
                 abp.notify.success(l('SavedSuccessfully'));
                 _$ExpensesTable.ajax.reload();
+                getDashboardTotalExpense();
                 //getCalendarEvents();
             })
             .always(function () {
@@ -236,6 +245,14 @@ $(".dateTimePicker-expense-filter-endDate").datetimepicker({
         deleteExpenses(expensesId, expensesName);
     });
 
+    function getDashboardTotalExpense() {
+        _expensesService.dashboardTotalExpensesSum().done(function (result) {
+            $(".divExpensesNotesText").text(result);
+        }).always(function () {
+            abp.ui.clearBusy(_$table);
+        });
+    }
+
     function deleteExpenses(expensesId, expensesName) {
         abp.message.confirm(
             abp.utils.formatString("Are You Sure Want To Delete",
@@ -248,6 +265,7 @@ $(".dateTimePicker-expense-filter-endDate").datetimepicker({
                     }).done(() => {
                         abp.notify.success(l('SuccessfullyDeleted'));
                         _$ExpensesTable.ajax.reload();
+                        getDashboardTotalExpense();
                         //getCalendarEvents();
                     });
                 }
@@ -274,6 +292,7 @@ $(".dateTimePicker-expense-filter-endDate").datetimepicker({
 
     abp.event.on('expenses.edited', function () {
         _$ExpensesTable.ajax.reload();
+        getDashboardTotalExpense();
     });
 
     $(document).on('click', '.edit-expenses', function (e) {

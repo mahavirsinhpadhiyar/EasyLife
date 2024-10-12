@@ -21,7 +21,6 @@ namespace EasyLife.Financial.Investment
         #region ForeignKeys
         [ForeignKey("EL_Financial_Investment_Share_Master")]
         public Guid EL_Financial_Investment_Share_Master_Id { get; set; }
-        public EL_Financial_Investment_Share_Master EL_Financial_Investment_Share_Master { get; set; }
         #endregion ForeignKeys
     }
 }

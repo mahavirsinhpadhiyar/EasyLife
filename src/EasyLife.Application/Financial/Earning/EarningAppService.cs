@@ -6,7 +6,6 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using EasyLife.Authorization;
 using EasyLife.Authorization.Users;
-using EasyLife.Financial.Earning;
 using EasyLife.Financial.Earning.Dto;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -237,6 +236,98 @@ namespace EasyLife.Financial.Earning
         {
             var earningDetails = await _earningsRepository.GetAsync(input.Id);
             await _earningsRepository.HardDeleteAsync(earningDetails);
+        }
+
+        /// <summary>
+        /// Return chart report details of expenses
+        /// </summary>
+        /// <param name="FilterUserId">Selected User Id</param>
+        /// <param name="FilterStartDate">Start Date</param>
+        /// <param name="FilterEndDate">End Date</param>
+        /// <returns></returns>
+        public BarChartEarnings GetEarningsBarDetails(long? FilterUserId, DateTime? FilterStartDate, DateTime? FilterEndDate)
+        {
+            if (FilterUserId == null || FilterUserId == 0)
+                FilterUserId = AbpSession.UserId;
+
+            var earningsList = new List<Earnings>();
+
+            if (FilterStartDate == null && FilterEndDate == null)
+            {
+                FilterStartDate = new DateTime(DateTime.Now.Year, 1, 1);
+                FilterEndDate = new DateTime(DateTime.Now.Year, 12, 31);
+            }
+
+            if (FilterStartDate != null && FilterEndDate != null)
+            {
+                earningsList = _earningsRepository.GetAll()
+                    .Include(e => e.EarningCategory)
+                    .Where(i => i.EarningDate >= FilterStartDate && i.EarningDate <= FilterEndDate && i.UserId == FilterUserId && !i.DoNotConsiderInTotal)
+                    .Select(n => new Earnings()
+                    {
+                        CreationTime = n.CreationTime,
+                        CreatorUserId = n.CreatorUserId,
+                        DeleterUserId = n.DeleterUserId,
+                        DeletionTime = n.DeletionTime,
+                        DoNotConsiderInTotal = n.DoNotConsiderInTotal,
+                        EarningCategory = n.EarningCategory,
+                        EarningDate = n.EarningDate,
+                        EarningCategoryId = n.EarningCategoryId,
+                        Id = n.Id,
+                        IsDeleted = n.IsDeleted,
+                        LastModificationTime = n.LastModificationTime,
+                        LastModifierUserId = n.LastModifierUserId,
+                        Money = n.Money,
+                        Note = n.Note,
+                        Payee = n.Payee,
+                        UserId = n.UserId
+                    })
+                    .OrderBy(s => s.EarningCategory)
+                    .ToList();
+            }
+            else
+            {
+                earningsList = _earningsRepository.GetAll()
+                    .Include(e => e.EarningCategory)
+                    .Where(i => i.UserId == FilterUserId)
+                    .OrderBy(s => s.EarningCategory)
+                    .ToList();
+            }
+
+            var resultData = earningsList
+                        .OrderBy(x => x.EarningCategory.CategoryName)
+                        .GroupBy(e => e.EarningCategory.CategoryName)
+                        .Select(x => new data()
+                        {
+                            name = x.Key,
+                            value = x.Sum(items => items.Money).ToString()
+                        }).ToList();
+
+            //var result = _expensesRepository.GetAll()
+            //        .Include(e => e.ExpenseCategory)
+            //        .GroupBy(ex => ex.ExpenseCategory.CategoryName, (key, value) => new data() { name = value, value = exp.Sum() });
+
+            BarChartEarnings barChartEarnings = new BarChartEarnings();
+
+            //Hide as share names overrite the main heading
+            //barChartShareMasterWithOrders.title.text = "Shares Count";        
+            //barChartShareMasterWithOrders.title.left = "center";
+
+            barChartEarnings.tooltip.trigger = "item";
+            barChartEarnings.legend.orient = "horizontal";
+            barChartEarnings.legend.left = "center";
+            barChartEarnings.series.Add(
+                new series()
+                {
+                    name = "Earnings Total Counts",
+                    type = "pie",
+                    radius = "50%",
+                    data = resultData,
+                    emphasis = new emphasis() { itemStyle = new itemStyle() { shadowBlur = 10, shadowOffsetX = 0, shadowColor = "rgba(0, 0, 0, 0.5)" } }
+                }
+                );
+
+            return barChartEarnings;
         }
     }
 }

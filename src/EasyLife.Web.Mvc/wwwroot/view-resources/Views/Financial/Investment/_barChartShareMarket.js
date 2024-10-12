@@ -18,6 +18,7 @@ function barChartShareMarketFunction() {
 
         window.addEventListener('resize', myChart.resize);
     }).always(function () {
+        $(".shareMarketCollapseOne").text("Share Master");
         abp.ui.clearBusy();
     })
 }

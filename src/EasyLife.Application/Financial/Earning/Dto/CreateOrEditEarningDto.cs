@@ -19,7 +19,7 @@ namespace EasyLife.Financial.Earning.Dto
         {
             get
             {
-                return EarningDate.ToString("dd/MM/yyyy HH:mm");
+                return EarningDate.ToString_dd_MM_yyyy_HH_MM();
             }
         }
     }

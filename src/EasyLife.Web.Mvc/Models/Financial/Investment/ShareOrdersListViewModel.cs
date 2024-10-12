@@ -1,7 +1,5 @@
 ﻿using EasyLife.Financial.Investments.ShareMarket.Dto.ShareOrders;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
 
 namespace EasyLife.Web.Models.Financial.Investment
 {

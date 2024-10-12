@@ -13,11 +13,11 @@
 
 @if (Model.Expenses.Id == Guid.Empty)
 {
-@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Duplicate Expenses"));
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Duplicate Expenses"));
 }
 else
 {
-@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Expenses"));
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel("Edit Expenses"));
 }
 <form name="expensesForm" role="form" class="form-horizontal">
     <div class="modal-body" style="height:500px; overflow:auto;">
@@ -47,13 +47,13 @@ else
                     {
                         if (Model.Expenses.ExpenseCategoryId.ToString().ToLower() == item.Value.ToLower())
                         {
-        <option value="@item.Value" selected="selected">@item.Text</option>
- }
-    else
-    {
-<option value="@item.Value">@item.Text</option>
-}
-}
+                            <option value="@item.Value" selected="selected">@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
                 </select>
             </div>
         </div>
@@ -67,22 +67,22 @@ else
 
         @if (Model.LoggedInUserIsAdmin == EasyLife.Authorization.Roles.RoleEnums.Roles.Admin || Model.LoggedInUserIsAdmin == EasyLife.Authorization.Roles.RoleEnums.Roles.SuperAdmin)
         {
-<div class="row col-md-12">
-    <div class="col-md-12 form-group">
-        <div class="custom-control custom-checkbox">
-            @*@Html.CheckBoxFor(m => Model.Expenses.DoNotConsiderInTotal, new { @class = "custom-control-input", @Name = "EditDoNotConsiderInTotal" })*@
-            @if (Model.Expenses.DoNotConsiderInTotal)
-            {
-                <input class="custom-control-input" type="checkbox" id="EditDoNotConsiderInTotal" name="DoNotConsiderInTotal" checked="checked"/>
-            }
-            else
-            {
-                <input class="custom-control-input" type="checkbox" id="EditDoNotConsiderInTotal" name="DoNotConsiderInTotal" />
-            }
-            <label for="EditDoNotConsiderInTotal" class="custom-control-label">Do Not Consider in Total</label>
-        </div>
-    </div>
-</div>}
+            <div class="row col-md-12">
+                <div class="col-md-12 form-group">
+                    <div class="custom-control custom-checkbox">
+                        @*@Html.CheckBoxFor(m => Model.Expenses.DoNotConsiderInTotal, new { @class = "custom-control-input", @Name = "EditDoNotConsiderInTotal" })*@
+                        @if (Model.Expenses.DoNotConsiderInTotal)
+                        {
+                            <input class="custom-control-input" type="checkbox" id="EditDoNotConsiderInTotal" name="DoNotConsiderInTotal" checked="checked" />
+                        }
+                        else
+                        {
+                            <input class="custom-control-input" type="checkbox" id="EditDoNotConsiderInTotal" name="DoNotConsiderInTotal" />
+                        }
+                        <label for="EditDoNotConsiderInTotal" class="custom-control-label">Do Not Consider in Total</label>
+                    </div>
+                </div>
+            </div>}
     </div>
     @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
 </form>

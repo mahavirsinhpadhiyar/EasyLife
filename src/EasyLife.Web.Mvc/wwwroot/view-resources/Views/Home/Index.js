@@ -141,6 +141,36 @@
         getDashboardShareMarketSum(start, end);
     });
 
+    $('.dashboardExpensesChartDaterange').daterangepicker({
+        ranges: {
+            Today: [moment(), moment()],
+            Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate: moment()
+    }, function (start, end) {
+        barChartExpenses(start._d, end._d);
+    });
+
+    $('.dashboardEarningsChartDaterange').daterangepicker({
+        ranges: {
+            Today: [moment(), moment()],
+            Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate: moment()
+    }, function (start, end) {
+        barChartEarnings(start._d, end._d);
+    });
+
     var _expensesService = abp.services.app.expenses,
         _earningsService = abp.services.app.earning,
         _shareMasterService = abp.services.app.shareMaster;
@@ -165,10 +195,22 @@
         _shareMasterService.calculateTotalInvested().done(function (result) {
             $(".monthlyInvestments").html(result);
         }).always(function () {
-            abp.ui.clearBusy(_$table);
+            //abp.ui.clearBusy(_$table);
         });
     }
 
+    function getBarChartShareMarketFunction(startDate,endDate)
+    {
+        barChartShareMarketFunction(startDate, endDate);
+    }
+
+    function barChartExpenses(startDate, endDate) {
+        barChartExpensesFunction(startDate, endDate);
+    }
+
+    function barChartEarnings(startDate, endDate) {
+        barChartEarningsFunction(startDate, endDate);
+    }
 
     getDashboardExpensesSum();
     getDashboardEarningsSum();

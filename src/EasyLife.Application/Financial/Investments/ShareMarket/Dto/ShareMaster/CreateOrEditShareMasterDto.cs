@@ -14,6 +14,7 @@ namespace EasyLife.Financial.Investments.ShareMarket.ShareMaster.Dto
         public double TotalEarnedOrLoss { get; set; }
         public int TotalShare { get; set; }
         public long UserId { get; set; }
+        public string Notes { get; set; }
 
         //for display
         public string TotalAveragePriceDisplay { get; set; }
